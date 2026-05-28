@@ -1,0 +1,635 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Unión de Corazones · Aniversario de Noviazgo</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(145deg, #2b1020 0%, #4a1a2e 50%, #1f0a18 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Quicksand', system-ui, -apple-system, 'Dancing Script', cursive, sans-serif;
+            overflow: hidden;
+            position: relative;
+            cursor: default;
+        }
+
+        /* Partículas flotantes de fondo (románticas) */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .float-heart {
+            position: absolute;
+            background: rgba(255, 120, 160, 0.35);
+            width: 20px;
+            height: 20px;
+            transform: rotate(45deg);
+            animation: floatUp 12s infinite linear;
+            border-radius: 4px 4px 0 4px;
+            box-shadow: 0 0 12px rgba(255, 80, 120, 0.6);
+        }
+
+        .float-heart::before,
+        .float-heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        .float-heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .float-heart::after {
+            top: 0;
+            left: -10px;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(45deg) scale(0.6);
+                opacity: 0;
+            }
+            20% {
+                opacity: 0.7;
+            }
+            80% {
+                opacity: 0.5;
+            }
+            100% {
+                transform: translateY(-20vh) rotate(45deg) scale(1.2);
+                opacity: 0;
+            }
+        }
+
+        /* Contenedor principal del canvas y texto */
+        .romantic-container {
+            position: relative;
+            z-index: 10;
+            width: 90%;
+            max-width: 1000px;
+            aspect-ratio: 16 / 9;
+            background: rgba(20, 5, 12, 0.25);
+            border-radius: 48px;
+            backdrop-filter: blur(3px);
+            box-shadow: 0 25px 45px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(255, 200, 210, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        canvas {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 48px;
+            display: block;
+            cursor: pointer;
+        }
+
+        /* Mensaje romántico (aparece después de la unión) */
+        .anniversary-message {
+            position: absolute;
+            z-index: 20;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 240, 245, 0.95), rgba(255, 210, 225, 0.98));
+            backdrop-filter: blur(8px);
+            padding: 1.8rem 2.5rem;
+            border-radius: 80px 40px 80px 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(255, 255, 255, 0.6), 0 0 0 6px #ff95b4;
+            width: auto;
+            max-width: 85%;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: opacity 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.6s ease-out;
+            pointer-events: none;
+            font-weight: 600;
+        }
+
+        .anniversary-message.show {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .anniversary-message h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.6rem;
+            color: #b13e6b;
+            text-shadow: 2px 2px 8px rgba(255, 200, 210, 0.8);
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+        }
+
+        .anniversary-message p {
+            font-family: 'Segoe UI', 'Quicksand', sans-serif;
+            font-size: 1.3rem;
+            color: #5e2a42;
+            font-weight: 500;
+            margin: 0.25rem 0;
+        }
+
+        .date-special {
+            font-size: 1rem;
+            margin-top: 12px;
+            color: #c06b8d;
+            border-top: 1px dashed #f0a6c0;
+            padding-top: 8px;
+            letter-spacing: 1px;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        /* Botón para revivir la magia */
+        .replay-btn {
+            position: absolute;
+            bottom: -70px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(120deg, #ffb7c5, #ff8aa7);
+            border: none;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            font-weight: bold;
+            font-size: 1rem;
+            padding: 10px 28px;
+            border-radius: 60px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+            transition: all 0.2s ease;
+            z-index: 25;
+            letter-spacing: 1px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .replay-btn.visible {
+            opacity: 1;
+            pointer-events: auto;
+            bottom: -30px;
+        }
+
+        .replay-btn:hover {
+            background: #ff779b;
+            transform: translateX(-50%) scale(1.02);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 650px) {
+            .anniversary-message h2 { font-size: 1.8rem; }
+            .anniversary-message p { font-size: 1rem; }
+            .anniversary-message { padding: 1.2rem 1.5rem; }
+        }
+
+        /* Brillo suave en canvas */
+        canvas {
+            transition: filter 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+<div class="floating-hearts" id="floatingHearts"></div>
+<div class="romantic-container">
+    <canvas id="heartCanvas" width="800" height="450" style="width:100%; height:100%; display:block;"></canvas>
+    <div class="anniversary-message" id="anniversaryMsg">
+        <h2>✨ ¡Feliz Bimesario, Mi Amor!✨</h2>
+        <p>Hoy celebramos el latido de nuestros corazones.</p>
+        <p>🚀 Bastaron solo 60 días para que alborotaras mi galaxia entera y cambiaras mi órbita por completo.</p>
+        <p>💕 Eres la persona que amo y mi lugar seguro. Esto solo es el comienzo, ¡Vamos por mucho más! 💕</p>
+        <div class="date-special">Juntos escribimos la historia más hermosa • Gracias por sumarle risas a mis días, 
+            por tus mensajes que me hacen sonreír como un bobo. <br>
+            ¡Eres mi casualidad favorita del universo, TE AMO AMOR MIO! 
+            ¡Feliz Aniversario Mi Flaca Bella! ❤️‍🔥</div>
+    </div>
+    <button class="replay-btn" id="replayBtn">⟳ Revivir este momento</button>
+</div>
+
+<script>
+    (function() {
+        // ---------- Configuración romántica ----------
+        const canvas = document.getElementById('heartCanvas');
+        const ctx = canvas.getContext('2d');
+        const msgDiv = document.getElementById('anniversaryMsg');
+        const replayBtn = document.getElementById('replayBtn');
+
+        let width, height;
+        let animationFrame = null;
+        let currentPhase = 'moving'; // moving, merging, final
+        let startMoveTime = null;
+        let moveDuration = 1800; // ms
+        let mergeStartTime = null;
+        let mergeDuration = 700; // duración de la aparición del gran corazón
+        let bigHeartScale = 0;
+        let finalMessageShown = false;
+        let mergeCompleted = false;     // para evitar repetir lógica
+        let movementCompleted = false;
+
+        // Posiciones de los corazones (coordenadas dinámicas)
+        let leftHeart = { x: 0, y: 0, size: 0 };
+        let rightHeart = { x: 0, y: 0, size: 0 };
+        let centerX = 0, centerY = 0;
+        let baseHeartSize = 0;
+
+        // Colores románticos degradados
+        const leftColor1 = "#ff5f8f";
+        const leftColor2 = "#ff2d6d";
+        const rightColor1 = "#ff85ab";
+        const rightColor2 = "#ff4d7a";
+
+        // Función para dibujar un corazón perfecto con relleno degradado radial
+        function drawHeart(ctx, x, y, size, color1, color2, glow = true) {
+            ctx.save();
+            // Sombra suave para efecto romántico
+            if (glow) {
+                ctx.shadowColor = "rgba(255, 100, 130, 0.7)";
+                ctx.shadowBlur = 14;
+                ctx.shadowOffsetX = 0;
+                ctx.shadowOffsetY = 2;
+            } else {
+                ctx.shadowBlur = 0;
+            }
+            
+            const grad = ctx.createRadialGradient(x - size*0.2, y - size*0.2, size*0.2, x, y, size*0.8);
+            grad.addColorStop(0, color1);
+            grad.addColorStop(1, color2);
+            
+            ctx.beginPath();
+            const topCurveHeight = size * 0.3;
+            // Dibujar corazón mediante curvas bezier
+            ctx.moveTo(x, y + size * 0.25);
+            ctx.bezierCurveTo(x, y + size * 0.1, x - size * 0.5, y - size * 0.2, x - size * 0.3, y - size * 0.5);
+            ctx.bezierCurveTo(x - size * 0.15, y - size * 0.7, x, y - size * 0.3, x, y - size * 0.15);
+            ctx.bezierCurveTo(x, y - size * 0.3, x + size * 0.15, y - size * 0.7, x + size * 0.3, y - size * 0.5);
+            ctx.bezierCurveTo(x + size * 0.5, y - size * 0.2, x, y + size * 0.1, x, y + size * 0.25);
+            ctx.fillStyle = grad;
+            ctx.fill();
+            
+            // Brillo extra (toque romántico)
+            ctx.beginPath();
+            ctx.arc(x - size*0.22, y - size*0.22, size*0.1, 0, Math.PI*2);
+            ctx.fillStyle = "rgba(255, 230, 240, 0.7)";
+            ctx.fill();
+            ctx.restore();
+        }
+
+        // Función para dibujar corazón grande central (unión)
+        function drawCentralHeart(scale, glowIntense = true) {
+            if (!scale) scale = 1;
+            const heartSize = baseHeartSize * 1.4 * scale;
+            ctx.save();
+            if (glowIntense) {
+                ctx.shadowBlur = 20;
+                ctx.shadowColor = "#ff90b0";
+            }
+            const gradCenter = ctx.createLinearGradient(centerX - 20, centerY - 20, centerX + 20, centerY + 20);
+            gradCenter.addColorStop(0, "#ff4d7a");
+            gradCenter.addColorStop(1, "#ff1a4f");
+            ctx.beginPath();
+            const x = centerX, y = centerY;
+            const size = heartSize;
+            ctx.moveTo(x, y + size * 0.25);
+            ctx.bezierCurveTo(x, y + size * 0.1, x - size * 0.5, y - size * 0.2, x - size * 0.3, y - size * 0.5);
+            ctx.bezierCurveTo(x - size * 0.15, y - size * 0.7, x, y - size * 0.3, x, y - size * 0.15);
+            ctx.bezierCurveTo(x, y - size * 0.3, x + size * 0.15, y - size * 0.7, x + size * 0.3, y - size * 0.5);
+            ctx.bezierCurveTo(x + size * 0.5, y - size * 0.2, x, y + size * 0.1, x, y + size * 0.25);
+            ctx.fillStyle = gradCenter;
+            ctx.fill();
+            // destello
+            ctx.beginPath();
+            ctx.arc(x - size*0.18, y - size*0.2, size*0.12, 0, Math.PI*2);
+            ctx.fillStyle = "rgba(255, 220, 230, 0.9)";
+            ctx.fill();
+            ctx.restore();
+        }
+
+        // Actualizar posición durante movimiento (easing suave)
+        function updateMoving(progress) {
+            // easeOutCubic para un movimiento romántico y delicado
+            const easeOut = 1 - Math.pow(1 - progress, 3);
+            const currentLeftX = leftHeart.startX + (centerX - leftHeart.startX) * easeOut;
+            const currentRightX = rightHeart.startX + (centerX - rightHeart.startX) * easeOut;
+            leftHeart.x = currentLeftX;
+            rightHeart.x = currentRightX;
+            leftHeart.y = centerY;
+            rightHeart.y = centerY;
+        }
+
+        // Dibujar fase moving (dos corazones acercándose)
+        function drawMoving() {
+            drawHeart(ctx, leftHeart.x, leftHeart.y, baseHeartSize, leftColor1, leftColor2, true);
+            drawHeart(ctx, rightHeart.x, rightHeart.y, baseHeartSize, rightColor1, rightColor2, true);
+            // Partículas de unión suave cuando están cerca
+            const distance = Math.abs(leftHeart.x - rightHeart.x);
+            if (distance < 90) {
+                ctx.save();
+                ctx.globalCompositeOperation = 'lighter';
+                for (let i = 0; i < 6; i++) {
+                    const sparkX = (leftHeart.x + rightHeart.x) / 2 + (Math.random() - 0.5) * 25;
+                    const sparkY = centerY + (Math.random() - 0.5) * 20;
+                    ctx.beginPath();
+                    ctx.arc(sparkX, sparkY, Math.random() * 3 + 2, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 180, 200, ${Math.random() * 0.6 + 0.3})`;
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        // Animación principal manejada con requestFrame
+        let animTime = null;
+        function animate(timestamp) {
+            if (!width || !height) return;
+            ctx.clearRect(0, 0, width, height);
+            
+            // Fondo romántico degradado dentro del canvas
+            const gradBg = ctx.createLinearGradient(0, 0, width, height);
+            gradBg.addColorStop(0, '#1f0a16');
+            gradBg.addColorStop(0.5, '#3a1525');
+            gradBg.addColorStop(1, '#260e1c');
+            ctx.fillStyle = gradBg;
+            ctx.fillRect(0, 0, width, height);
+            
+            // Dibujar estrellitas / motas de luz
+            ctx.fillStyle = "rgba(255, 210, 220, 0.5)";
+            for (let i = 0; i < 50; i++) {
+                if (i%2 === 0) continue;
+                ctx.beginPath();
+                ctx.arc( (i*131)%width, (i*253)%height, 1.2, 0, Math.PI*2);
+                ctx.fill();
+            }
+            
+            if (currentPhase === 'moving') {
+                if (!movementCompleted && startMoveTime !== null) {
+                    let elapsed = timestamp - startMoveTime;
+                    let prog = Math.min(1, elapsed / moveDuration);
+                    updateMoving(prog);
+                    drawMoving();
+                    
+                    if (prog >= 1.0 && !movementCompleted) {
+                        movementCompleted = true;
+                        currentPhase = 'merging';
+                        mergeStartTime = timestamp;
+                        bigHeartScale = 0;
+                        // Ocultar msg previo si estaba (por si replay)
+                        msgDiv.classList.remove('show');
+                        finalMessageShown = false;
+                        replayBtn.classList.remove('visible');
+                        mergeCompleted = false;
+                    }
+                } else if (startMoveTime === null) {
+                    // fallback
+                    drawMoving();
+                } else {
+                    drawMoving();
+                }
+            }
+            else if (currentPhase === 'merging') {
+                // Dibujar los corazones originales desapareciendo gradualmente mientras aparece el grande
+                if (!mergeCompleted) {
+                    let elapsedMerge = timestamp - mergeStartTime;
+                    let mergeProg = Math.min(1, elapsedMerge / mergeDuration);
+                    // fade out corazones individuales
+                    let fadeAlpha = Math.max(0, 1 - mergeProg * 1.5);
+                    if (fadeAlpha > 0) {
+                        ctx.save();
+                        ctx.globalAlpha = fadeAlpha;
+                        drawHeart(ctx, leftHeart.x, leftHeart.y, baseHeartSize, leftColor1, leftColor2, true);
+                        drawHeart(ctx, rightHeart.x, rightHeart.y, baseHeartSize, rightColor1, rightColor2, true);
+                        ctx.restore();
+                    }
+                    // animación de escala del gran corazón
+                    bigHeartScale = Math.min(1.2, mergeProg * 1.2);
+                    if (bigHeartScale > 1.0) bigHeartScale = 1.0;
+                    drawCentralHeart(bigHeartScale, true);
+                    
+                    if (mergeProg >= 1.0) {
+                        mergeCompleted = true;
+                        currentPhase = 'final';
+                        // mostrar mensaje después de un pequeño delay para que respire
+                        setTimeout(() => {
+                            if (currentPhase === 'final') {
+                                msgDiv.classList.add('show');
+                                finalMessageShown = true;
+                                replayBtn.classList.add('visible');
+                            }
+                        }, 200);
+                    }
+                } else {
+                    drawCentralHeart(1.0, true);
+                }
+            }
+            else if (currentPhase === 'final') {
+                drawCentralHeart(1.0, true);
+                // agregar un brillo pulsante sutil alrededor del corazón central
+                ctx.save();
+                ctx.shadowBlur = 0;
+                ctx.beginPath();
+                ctx.arc(centerX, centerY - baseHeartSize*0.1, baseHeartSize*0.5, 0, Math.PI*2);
+                ctx.fillStyle = "rgba(255, 140, 170, 0.15)";
+                ctx.fill();
+                ctx.restore();
+                if (!finalMessageShown && !msgDiv.classList.contains('show')) {
+                    // por si acaso
+                    msgDiv.classList.add('show');
+                    finalMessageShown = true;
+                    replayBtn.classList.add('visible');
+                }
+            }
+            
+            animationFrame = requestAnimationFrame(animate);
+        }
+        
+        // Reiniciar toda la magia
+        function resetRomance() {
+            // cancelar frame anterior y reiniciar fases
+            if (animationFrame) cancelAnimationFrame(animationFrame);
+            currentPhase = 'moving';
+            movementCompleted = false;
+            mergeCompleted = false;
+            finalMessageShown = false;
+            bigHeartScale = 0;
+            msgDiv.classList.remove('show');
+            replayBtn.classList.remove('visible');
+            
+            // Recalcular dimensiones y posiciones iniciales
+            resizeAndSetPositions();
+            
+            // reiniciar tiempos
+            startMoveTime = performance.now();
+            mergeStartTime = null;
+            // lanzar animación nueva
+            animationFrame = requestAnimationFrame(animate);
+        }
+        
+        // Inicializar coordenadas según tamaño del canvas
+        function resizeAndSetPositions() {
+            const rect = canvas.getBoundingClientRect();
+            width = rect.width;
+            height = rect.height;
+            canvas.width = width;
+            canvas.height = height;
+            
+            centerX = width / 2;
+            centerY = height / 2;
+            baseHeartSize = Math.min(width, height) * 0.12;
+            // ajuste fino
+            if (baseHeartSize < 28) baseHeartSize = 28;
+            if (baseHeartSize > 70) baseHeartSize = 70;
+            
+            // posiciones iniciales
+            leftHeart.startX = width * 0.22;
+            rightHeart.startX = width * 0.78;
+            leftHeart.x = leftHeart.startX;
+            rightHeart.x = rightHeart.startX;
+            leftHeart.y = centerY;
+            rightHeart.y = centerY;
+            leftHeart.size = baseHeartSize;
+            rightHeart.size = baseHeartSize;
+        }
+        
+        // Generar corazones flotantes en el fondo (romántico extra)
+        function generateFloatingHearts() {
+            const container = document.getElementById('floatingHearts');
+            container.innerHTML = '';
+            const numberOfHearts = 18;
+            for (let i = 0; i < numberOfHearts; i++) {
+                const heartSpan = document.createElement('div');
+                heartSpan.classList.add('float-heart');
+                const size = Math.random() * 18 + 10;
+                heartSpan.style.width = `${size}px`;
+                heartSpan.style.height = `${size}px`;
+                heartSpan.style.left = `${Math.random() * 100}%`;
+                heartSpan.style.animationDuration = `${Math.random() * 10 + 8}s`;
+                heartSpan.style.animationDelay = `${Math.random() * 8}s`;
+                heartSpan.style.opacity = Math.random() * 0.4 + 0.2;
+                heartSpan.style.transform = `rotate(${Math.random() * 360}deg)`;
+                // adaptar pseudoelementos
+                const style = document.createElement('style');
+                if (!document.querySelector('#dynamicHeartStyle')) {
+                    style.id = 'dynamicHeartStyle';
+                    document.head.appendChild(style);
+                }
+                container.appendChild(heartSpan);
+            }
+        }
+        
+        // Redimension responsiva y reinicio limpio de canvas
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            if (resizeTimeout) clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                if (currentPhase !== 'moving') {
+                    // Si se redimensiona mientras está finalizado, reiniciamos con elegancia para evitar deformaciones
+                    resetRomance();
+                } else {
+                    resizeAndSetPositions();
+                    // mantener movimiento vigente
+                    if (startMoveTime) {
+                        // reajustar start positions para no romper la continuidad visual
+                        leftHeart.startX = width * 0.22;
+                        rightHeart.startX = width * 0.78;
+                        leftHeart.x = leftHeart.startX;
+                        rightHeart.x = rightHeart.startX;
+                    } else {
+                        resizeAndSetPositions();
+                    }
+                }
+            }, 100);
+        });
+        
+        // Llamada inicial y preparación
+        function init() {
+            resizeAndSetPositions();
+            generateFloatingHearts();
+            startMoveTime = performance.now();
+            currentPhase = 'moving';
+            movementCompleted = false;
+            mergeCompleted = false;
+            finalMessageShown = false;
+            msgDiv.classList.remove('show');
+            replayBtn.classList.remove('visible');
+            animationFrame = requestAnimationFrame(animate);
+        }
+        
+        // Evento del botón replay
+        replayBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            resetRomance();
+        });
+
+        // Botón de regreso a pantalla principal
+        // (creado dinámicamente si no existe en el DOM)
+        let backBtn = document.getElementById('backBtn');
+        if (!backBtn) {
+            backBtn = document.createElement('button');
+            backBtn.id = 'backBtn';
+            backBtn.type = 'button';
+            backBtn.textContent = '← Volver';
+            backBtn.style.position = 'absolute';
+            backBtn.style.top = '16px';
+            backBtn.style.left = '16px';
+            backBtn.style.zIndex = '50';
+            backBtn.style.background = 'linear-gradient(120deg, #ffb7c5, #ff8aa7)';
+            backBtn.style.border = 'none';
+            backBtn.style.color = '#fff';
+            backBtn.style.padding = '10px 18px';
+            backBtn.style.borderRadius = '999px';
+            backBtn.style.cursor = 'pointer';
+            backBtn.style.fontFamily = "'Segoe UI', sans-serif";
+            backBtn.style.fontWeight = 'bold';
+            backBtn.style.boxShadow = '0 4px 14px rgba(0,0,0,0.25)';
+            backBtn.style.backdropFilter = 'blur(5px)';
+
+            // Asegurar que no interfiera con animaciones
+            backBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.location.href = '../aniversario/index.html';
+            });
+
+            document.body.appendChild(backBtn);
+        } else {
+            backBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                window.location.href = '../aniversario/index.html';
+            });
+        }
+
+        
+        // Para que el canvas se ajuste correctamente desde el inicio
+        const resizeObserver = new ResizeObserver(() => {
+            if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
+                resizeAndSetPositions();
+            }
+        });
+        resizeObserver.observe(canvas);
+        
+        init();
+    })();
+</script>
+</body>
+</html>

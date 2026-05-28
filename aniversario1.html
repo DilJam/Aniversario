@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aniversario 1 ❤️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Indie+Flower&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #ffe4e1;
+            --color-env: #ffb7c5;
+            --color-env2: #ff9aad;
+            --color-heart: #ff4b6e;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 120vh;
+            background: radial-gradient(circle at top, #fff4f7 0%, var(--color-bg) 45%, #ffd5dd 100%);
+            font-family: 'Indie Flower', cursive;
+            overflow: hidden;
+        }
+
+        .back-btn{
+            position: fixed;
+            top: 18px;
+            left: 18px;
+            z-index: 1000;
+            cursor: pointer;
+            border: 0;
+            padding: 12px 16px;
+            border-radius: 999px;
+            color: white;
+            font-size: 16px;
+            background: linear-gradient(135deg, var(--color-env) 0%, var(--color-env2) 100%);
+            box-shadow: 0 14px 30px rgba(255,75,110,0.25);
+            backdrop-filter: blur(10px);
+            transition: transform .25s ease, opacity .25s ease;
+            opacity: 0.95;
+        }
+        .back-btn:hover{ transform: translateY(-3px) scale(1.02); opacity: 1; }
+
+        .main-wrapper {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- ESTILOS ORIGINALES (copiados) --- */
+
+        .container {
+            position: absolute;
+            cursor: pointer;
+            width: 300px;
+            height: 200px;
+            z-index: 10;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #ffb7c5;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.16);
+            border-radius: 0 0 24px 24px;
+        }
+
+        .envelope-front {
+            position: absolute;
+            inset: 0;
+            width: 0; height: 0;
+            border-top: 100px solid transparent;
+            border-right: 150px solid var(--color-env2);
+            border-bottom: 100px solid var(--color-env2);
+            border-left: 150px solid var(--color-env);
+            z-index: 11;
+            border-radius: 0 0 24px 24px;
+            pointer-events: none;
+        }
+
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 0; height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 100px solid var(--color-env2);
+            transform-origin: top center;
+            transition: transform 0.8s ease, z-index 0.2s;
+            z-index: 12;
+        }
+
+        .heart-seal {
+            position: absolute;
+            top: 85px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 45px;
+            z-index: 15;
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2));
+        }
+
+        .letter {
+            position: absolute;
+            left: 10px;
+            bottom: 10px;
+            width: 280px;
+            height: 180px;
+            background: #fffdf9;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            z-index: 5;
+
+            overflow: hidden;
+            display: flex;
+        }
+
+        .letter-content {
+            width: 100%;
+            padding: 15px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+
+            overflow-y: auto;
+            max-height: 100%;
+
+            scroll-behavior: smooth;
+            overscroll-behavior: contain;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .photo-frame {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            margin-bottom: 10px;
+            background: #f0f0f0;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .photo-frame img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        .photo-frame img.active { opacity: 1; }
+
+        .letter h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 26px;
+            color: var(--color-heart);
+            margin-bottom: 5px;
+        }
+        .letter p {
+            font-size: 14px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        .main-wrapper.is-open .container {
+            transform: translateX(-180px) translateY(80px) rotate(-2deg);
+        }
+
+        .main-wrapper { overflow: visible; }
+
+        .container.open .flap {
+            transform: rotateX(180deg);
+            z-index: 4;
+        }
+        .container.open .heart-seal {
+            opacity: 0;
+            transform: translate(-50%, -20px) scale(0.5);
+        }
+
+        .container.open .letter {
+            height: 440px;
+            transform: translateY(-140px);
+        }
+
+        .bouquet {
+            position: absolute;
+            width: 300px;
+            height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            margin-top: -100px;
+            z-index: 5;
+
+            opacity: 0;
+            transform: scale(0.8);
+            pointer-events: none;
+            transition: transform 0.8s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.8s ease;
+        }
+
+        .main-wrapper.is-open .bouquet {
+            opacity: 1;
+            transform: translateX(180px) scale(1);
+            pointer-events: all;
+        }
+
+        .ribbon-bow {
+            position: absolute;
+            bottom: 0;
+            font-size: 70px;
+            z-index: 20;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.2));
+        }
+
+        #bouquetFlowers {
+            position: absolute;
+            bottom: 40px;
+            width: 100%;
+            height: 100%;
+            z-index: 5;
+        }
+
+        .flower-stem {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            transform-origin: bottom center;
+        }
+
+        .stem-line {
+            width: 4px;
+            background: linear-gradient(180deg, #4a7c59 0%, #30543b 100%);
+            border-radius: 4px;
+            height: 0;
+            opacity: 0;
+            animation: growStem 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .stem-leaves {
+            position: absolute;
+            font-size: 16px;
+            opacity: 0;
+            bottom: 30%;
+            animation: popIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .flower {
+            position: absolute;
+            opacity: 0;
+            top: 0;
+            transform: translateY(-50%) scale(0);
+            animation: bloomFlower 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.15));
+        }
+
+        @keyframes growStem {
+            0% { height: 0; opacity: 1; }
+            100% { height: var(--stem-height); opacity: 1; }
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes bloomFlower {
+            0% { opacity: 0; transform: translateY(-50%) scale(0) rotate(-45deg); }
+            100% { opacity: 1; transform: translateY(-50%) scale(1) rotate(0deg); }
+        }
+
+        .particle {
+            position: fixed;
+            top: -50px;
+            z-index: 1;
+            font-size: 24px;
+            user-select: none;
+            pointer-events: none;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to { transform: translateY(120vh) rotate(360deg); }
+        }
+
+        .instruction {
+            position: fixed;
+            bottom: 40px;
+            padding: 12px 24px;
+            background: var(--color-heart);
+            color: white;
+            border-radius: 30px;
+            font-size: 16px;
+            box-shadow: 0 10px 20px rgba(255, 75, 110, 0.3);
+            animation: pulse 2s infinite;
+            pointer-events: none;
+            transition: opacity 0.5s;
+        }
+        .main-wrapper.is-open ~ .instruction { opacity: 0; }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-btn" id="backBtn" type="button" aria-label="Volver">← Volver</button>
+
+    <div class="main-wrapper" id="mainWrapper">
+        <div class="container" id="cardContainer">
+            <div class="envelope-wrapper">
+                <div class="flap"></div>
+                <div class="heart-seal">❤️</div>
+                <div class="letter">
+                    <div class="letter-content">
+                        <div class="photo-frame" id="gallery">
+                            <img src="../aniversario/1.jpeg" alt="Foto 1" class="active">
+                            <img src="../aniversario/2.jpeg" alt="Foto 2">
+                            <img src="../aniversario/3.jpeg" alt="Foto 3">
+                            <img src="../aniversario/4.jpeg" alt="Foto 4">
+                        </div>
+                        <h2>¡Feliz 1er Mes! ❤️</h2>
+                        <p>Hoy Cumplimos un mes de novios... El primero de muchos que quiero celebrar contigo,
+                            en 30 diás has demostrado ser la persona con la quien quiero escribir la historia más hermosa de mi vida!
+                            te amo mucho mi amor, gracias por ser tan especial conmigo,
+                            por hacerme tan feliz y por ser la mejor novia del mundo, te amo con todo mi corazón.
+                        </p>
+                    </div>
+                </div>
+                <div class="envelope-front"></div>
+            </div>
+        </div>
+
+        <div class="bouquet" id="bouquetContainer">
+            <div id="bouquetFlowers"></div>
+            <div class="ribbon-bow" id="ribbonBow">🎀</div>
+        </div>
+    </div>
+
+    <div class="instruction">Toca el corazón para abrir 💌</div>
+
+    <script>
+        const container = document.getElementById('cardContainer');
+        const mainWrapper = document.getElementById('mainWrapper');
+        const bouquetFlowers = document.getElementById('bouquetFlowers');
+        const backBtn = document.getElementById('backBtn');
+
+        backBtn.addEventListener('click', () => {
+            window.location.href = './index.html';
+        });
+
+        // CONFIGURACIÓN DEL RAMO
+        const flowerConfig = [
+            { type: '🌻', stem: 250, rot: -35, size: 55 },
+            { type: '🌻', stem: 270, rot: -15, size: 55 },
+            { type: '🌻', stem: 270, rot: 15, size: 55 },
+            { type: '🌻', stem: 250, rot: 35, size: 55 },
+            { type: '🌻', stem: 220, rot: -25, size: 60 },
+            { type: '🌻', stem: 240, rot: 0, size: 65 },
+            { type: '🌻', stem: 220, rot: 25, size: 60 },
+            { type: '🌼', stem: 170, rot: -40, size: 40 },
+            { type: '🌹', stem: 180, rot: -10, size: 45 },
+            { type: '🌹', stem: 180, rot: 10, size: 45 },
+            { type: '🌼', stem: 170, rot: 40, size: 40 }
+        ];
+
+        let isBouquetBuilt = false;
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.classList.add('particle');
+            const particles = ['❤️', '🌸', '✨', '🌹', '💖', '🌷', '🌼', '🌺'];
+            particle.textContent = particles[Math.floor(Math.random() * particles.length)];
+            particle.style.left = `${Math.random() * 100}vw`;
+            particle.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 5000);
+        }
+
+        function createBouquet() {
+            if (isBouquetBuilt) return;
+            isBouquetBuilt = true;
+
+            bouquetFlowers.innerHTML = '';
+
+            flowerConfig.forEach((config, index) => {
+                setTimeout(() => {
+                    const stemContainer = document.createElement('div');
+                    stemContainer.className = 'flower-stem';
+
+                    stemContainer.style.transform = `translateX(-50%) rotate(${config.rot}deg)`;
+                    stemContainer.style.setProperty('--stem-height', config.stem + 'px');
+
+                    const stemLine = document.createElement('div');
+                    stemLine.className = 'stem-line';
+                    stemContainer.appendChild(stemLine);
+
+                    if (Math.random() > 0.4) {
+                        const leaves = document.createElement('div');
+                        leaves.className = 'stem-leaves';
+                        leaves.textContent = '🌿';
+                        leaves.style.bottom = `${Math.random() * 40 + 20}%`;
+                        leaves.style.animationDelay = '0.3s';
+                        stemContainer.appendChild(leaves);
+                    }
+
+                    const flower = document.createElement('div');
+                    flower.className = 'flower';
+                    flower.textContent = config.type;
+                    flower.style.fontSize = `${config.size}px`;
+                    flower.style.animationDelay = '0.5s';
+                    stemContainer.appendChild(flower);
+
+                    bouquetFlowers.appendChild(stemContainer);
+                }, index * 100);
+            });
+        }
+
+        container.addEventListener('click', () => {
+            const wasOpen = container.classList.contains('open');
+
+            if (!wasOpen) {
+                container.classList.add('open');
+                mainWrapper.classList.add('is-open');
+
+                setTimeout(() => {
+                    createBouquet();
+                }, 500);
+            } else {
+                container.classList.remove('open');
+                mainWrapper.classList.remove('is-open');
+                isBouquetBuilt = false;
+                bouquetFlowers.innerHTML = '';
+            }
+        });
+
+        // GALERÍA DE IMÁGENES
+        const images = document.querySelectorAll('#gallery img');
+        let currentImg = 0;
+
+        if (images.length > 0) {
+            setInterval(() => {
+                images[currentImg].classList.remove('active');
+                currentImg = (currentImg + 1) % images.length;
+                images[currentImg].classList.add('active');
+            }, 3000);
+        }
+
+        // PARTÍCULAS CAÍDAS
+        setInterval(createParticle, 300);
+    </script>
+</body>
+</html>

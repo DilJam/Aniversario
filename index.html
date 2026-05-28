@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monstruos Enamorados ❤️</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Indie+Flower&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple-glow: rgba(124, 58, 237, 0.55);
+      --pink-glow:   rgba(236, 72, 153, 0.50);
+      --blue-glow:   rgba(37, 99, 235,  0.45);
+      --text-main:   #e9d5ff;
+      --text-muted:  #c4b5fd;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      background:
+        radial-gradient(ellipse at top left,    #2d0b6b 0%,  transparent 55%),
+        radial-gradient(ellipse at top right,   #0d1a4a 0%,  transparent 55%),
+        radial-gradient(ellipse at bottom right,#1a0a3e 0%,  transparent 55%),
+        radial-gradient(ellipse at bottom left, #0a2a1a 0%,  transparent 55%),
+        #080818;
+      font-family: 'Indie Flower', cursive;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ── ESTRELLAS ESTÁTICAS ── */
+    .star {
+      position: fixed;
+      border-radius: 50%;
+      background: white;
+      pointer-events: none;
+      animation: twinkle ease-in-out infinite;
+      z-index: 0;
+    }
+    @keyframes twinkle {
+      0%,100% { opacity: 0.2; transform: scale(0.8); }
+      50%      { opacity: 1;   transform: scale(1.4); }
+    }
+
+    /* ── SCAN LINE ── */
+    .scan-line {
+      position: fixed;
+      left: 0; right: 0; top: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(167,139,250,0.5), transparent);
+      animation: scan 5s linear infinite;
+      pointer-events: none;
+      z-index: 0;
+    }
+    @keyframes scan {
+      0%   { top: -2px; opacity: 0.8; }
+      100% { top: 100vh; opacity: 0; }
+    }
+
+    /* ── ORBS DE LUZ ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      animation: orbPulse ease-in-out infinite;
+      filter: blur(2px);
+    }
+    @keyframes orbPulse {
+      0%,100% { transform: scale(1);    opacity: 0.22; }
+      50%      { transform: scale(1.12); opacity: 0.38; }
+    }
+
+    /* ── PARTÍCULAS FLOTANTES ── */
+    .particle {
+      position: fixed;
+      bottom: -40px;
+      pointer-events: none;
+      z-index: 0;
+      animation: floatUp linear forwards;
+      user-select: none;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0)    translateX(0)   rotate(0deg)   scale(0.6); opacity: 0;   }
+      12%  { opacity: 0.85; }
+      100% { transform: translateY(-110vh) translateX(var(--drift,0px)) rotate(340deg) scale(1.2); opacity: 0; }
+    }
+
+    /* ── SHELL PRINCIPAL ── */
+    .shell {
+      position: relative;
+      z-index: 2;
+      width: min(680px, 95vw);
+      border-radius: 24px;
+      padding: 36px 28px 30px;
+      background: rgba(10, 5, 30, 0.72);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(167,139,250,0.25);
+      box-shadow:
+        0 0 0 1px rgba(167,139,250,0.08),
+        0 24px 64px rgba(0,0,0,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      text-align: center;
+      animation: fadeIn 1.1s ease both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)    scale(1);    }
+    }
+
+    /* Borde animado con gradiente */
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      border-radius: 25px;
+      background: linear-gradient(135deg,
+        rgba(167,139,250,0.4) 0%,
+        rgba(236,72,153,0.3) 40%,
+        rgba(59,130,246,0.35) 80%,
+        rgba(167,139,250,0.4) 100%);
+      z-index: -1;
+      animation: borderGlow 6s linear infinite;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+      padding: 1px;
+    }
+    @keyframes borderGlow {
+      0%   { filter: hue-rotate(0deg); }
+      100% { filter: hue-rotate(360deg); }
+    }
+
+    /* ── OJOS DE MONSTRUO ── */
+    .eyes {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .eye {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: eyeBlink 5s ease-in-out infinite;
+      overflow: hidden;
+    }
+    .eye.yellow {
+      background: radial-gradient(circle at 40% 35%, #fde68a, #f59e0b 55%, #b45309);
+      box-shadow: 0 0 18px rgba(245,158,11,0.65), 0 0 40px rgba(245,158,11,0.25);
+    }
+    .eye.pink {
+      background: radial-gradient(circle at 40% 35%, #fbcfe8, #ec4899 55%, #9d174d);
+      box-shadow: 0 0 18px rgba(236,72,153,0.65), 0 0 40px rgba(236,72,153,0.25);
+      animation-delay: 0.35s;
+    }
+    @keyframes eyeBlink {
+      0%,42%,58%,100% { transform: scaleY(1); }
+      50%              { transform: scaleY(0.06); }
+    }
+
+    .pupil {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #4c1d95, #1e1b4b 70%, #0f0c2e);
+      position: relative;
+      animation: eyeMove 6s ease-in-out infinite;
+    }
+    .pupil::after {
+      content: '';
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.9);
+      top: 4px;
+      right: 4px;
+      box-shadow: 0 0 4px rgba(255,255,255,0.5);
+    }
+    @keyframes eyeMove {
+      0%,100% { transform: translate(0,0); }
+      20%     { transform: translate(4px,-3px); }
+      40%     { transform: translate(-3px, 2px); }
+      60%     { transform: translate(3px, 3px); }
+      80%     { transform: translate(-2px,-2px); }
+    }
+
+    /* ── TÍTULO ── */
+    .title {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(32px, 6vw, 48px);
+      color: #a78bfa;
+      text-shadow:
+        0 0 10px rgba(167,139,250,0.7),
+        0 0 30px rgba(167,139,250,0.3);
+      margin-bottom: 12px;
+      line-height: 1.15;
+      animation: titlePulse 4s ease-in-out infinite;
+    }
+    @keyframes titlePulse {
+      0%,100% { text-shadow: 0 0 10px rgba(167,139,250,0.7), 0 0 30px rgba(167,139,250,0.3); }
+      50%      { text-shadow: 0 0 16px rgba(167,139,250,1),   0 0 50px rgba(167,139,250,0.5); }
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      line-height: 1.55;
+      margin-bottom: 28px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── BOTONES ── */
+    .buttons {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      cursor: pointer;
+      border: 1.5px solid rgba(167,139,250,0.4);
+      background: rgba(20, 8, 50, 0.75);
+      color: var(--text-main);
+      padding: 18px 22px;
+      border-radius: 16px;
+      font-size: 16px;
+      font-family: 'Indie Flower', cursive;
+      min-width: 230px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .btn::after {
+      content: "";
+      position: absolute;
+      inset: -60px;
+      background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.08), transparent 50%);
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    .btn:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(124,58,237,0.45), 0 0 0 1px rgba(167,139,250,0.6);
+      border-color: rgba(167,139,250,0.8);
+    }
+    .btn:hover::after { opacity: 1; }
+    .btn:active { transform: translateY(-2px) scale(1.01); }
+
+    .btn.blue {
+      border-color: rgba(96,165,250,0.4);
+      color: #bfdbfe;
+    }
+    .btn.blue:hover {
+      box-shadow: 0 16px 40px rgba(37,99,235,0.45), 0 0 0 1px rgba(96,165,250,0.6);
+      border-color: rgba(96,165,250,0.8);
+    }
+
+    .btn-door-icon {
+      font-size: 34px;
+      flex-shrink: 0;
+      filter: drop-shadow(0 0 8px rgba(167,139,250,0.5));
+      transition: filter .25s ease;
+    }
+    .btn:hover .btn-door-icon {
+      filter: drop-shadow(0 0 14px rgba(167,139,250,0.9));
+      animation: doorJiggle .4s ease;
+    }
+    @keyframes doorJiggle {
+      0%,100% { transform: rotate(0);     }
+      25%      { transform: rotate(-6deg); }
+      75%      { transform: rotate(5deg);  }
+    }
+
+    .btn-label { text-align: left; line-height: 1.3; }
+    .btn-code {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: monospace;
+      opacity: 0.55;
+      margin-bottom: 2px;
+    }
+    .btn-name {
+      display: block;
+      font-size: 18px;
+    }
+
+    .btn-badge {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      font-size: 14px;
+    }
+    .btn-heart {
+      position: absolute;
+      bottom: 7px;
+      right: 10px;
+      font-size: 11px;
+      color: rgba(244,114,182,0.6);
+    }
+
+    /* ── HINT ── */
+    .hint {
+      margin-top: 22px;
+      font-size: 13px;
+      color: rgba(196,181,253,0.6);
+    }
+
+    /* ── EXIT ── */
+    body.exiting .shell {
+      animation: fadeOut .45s ease forwards;
+    }
+    @keyframes fadeOut {
+      from { opacity:1; transform: scale(1);    filter: blur(0);    }
+      to   { opacity:0; transform: scale(0.97); filter: blur(2px); }
+    }
+
+    @media (max-width: 480px) {
+      .btn { min-width: 90%; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .star, .particle, .scan-line { display: none; }
+      * { animation: none !important; transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Orbs de luz -->
+  <div class="orb" style="width:280px;height:280px;left:-80px;top:-80px;background:radial-gradient(circle,#7c3aed,transparent 65%);animation-duration:8s;"></div>
+  <div class="orb" style="width:220px;height:220px;right:-60px;bottom:-60px;background:radial-gradient(circle,#ec4899,transparent 65%);animation-duration:10s;animation-delay:2s;"></div>
+  <div class="orb" style="width:160px;height:160px;left:45%;bottom:5%;background:radial-gradient(circle,#1d4ed8,transparent 65%);animation-duration:12s;animation-delay:4s;"></div>
+
+  <!-- Scan -->
+  <div class="scan-line"></div>
+
+  <!-- Tarjeta principal -->
+  <div class="shell" role="main" aria-label="Selección de aniversarios">
+
+    <div class="eyes">
+      <div class="eye yellow" aria-hidden="true">
+        <div class="pupil"></div>
+      </div>
+      <div class="eye pink" aria-hidden="true">
+        <div class="pupil" style="animation-delay:1.2s;"></div>
+      </div>
+    </div>
+
+    <div class="title">✨ Monsters in Love ✨</div>
+
+    <div class="subtitle">
+      Aquí también hay monstruos, pero son los que te hacen reír, suspirar y querer volver siempre.
+      Cada puerta esconde un recuerdo que es solo nuestro 💜
+    </div>
+
+    <div class="buttons">
+      <button class="btn" id="open1" type="button" aria-label="Ir al primer aniversario">
+        <span class="btn-door-icon">🚪</span>
+        <span class="btn-label">
+          <span class="btn-code">Door · 01</span>
+          <span class="btn-name">Primer aniversario</span>
+        </span>
+        <span class="btn-badge">💛</span>
+        <span class="btn-heart">nuestro · para siempre</span>
+      </button>
+
+      <button class="btn blue" id="open2" type="button" aria-label="Ver el segundo aniversario">
+        <span class="btn-door-icon">🚪</span>
+        <span class="btn-label">
+          <span class="btn-code">Door · 02</span>
+          <span class="btn-name">Segundo aniversario</span>
+        </span>
+        <span class="btn-badge">💙</span>
+        <span class="btn-heart">siempre · contigo</span>
+      </button>
+    </div>
+
+    <div class="hint">🌀 Cada puerta tiene su magia — y tú eres la mejor sorpresa de todas 💜</div>
+  </div>
+
+  <script>
+    /* ── Stars ── */
+    function spawnStar(){
+      const s = document.createElement('div');
+      s.className = 'star';
+      const size = Math.random() * 2.5 + 1;
+      s.style.cssText = `
+        width:${size}px; height:${size}px;
+        left:${Math.random()*100}vw;
+        top:${Math.random()*100}vh;
+        animation-duration:${Math.random()*2.5+2.5}s;
+        animation-delay:${Math.random()*3}s;
+        opacity:${0.25+Math.random()*0.6};
+      `;
+      document.body.appendChild(s);
+    }
+    for(let i=0;i<60;i++) spawnStar();
+
+    /* ── Particles ── */
+    const emojis = ['💜','🫶','💙','✨','💕','🌀','👁️','💡','⚡','🔮','🫀','💫'];
+    function spawnParticle(){
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      const dur = Math.random()*5 + 6;
+      p.style.cssText = `
+        left:${Math.random()*100}vw;
+        font-size:${Math.random()*12+16}px;
+        animation-duration:${dur}s;
+        animation-delay:${Math.random()*2}s;
+        --drift:${Math.random()*100-50}px;
+        opacity:${0.55+Math.random()*0.3};
+      `;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), (dur+2)*1000);
+    }
+    for(let i=0;i<30;i++) setTimeout(spawnParticle, i*280);
+    setInterval(spawnParticle, 600);
+
+    /* ── Navigation ── */
+    function navigateTo(url){
+      document.body.classList.add('exiting');
+      document.querySelectorAll('.btn').forEach(b => b.disabled = true);
+      setTimeout(() => window.location.href = url, 430);
+    }
+    document.getElementById('open1').addEventListener('click', () => navigateTo('./aniversario1.html'));
+    document.getElementById('open2').addEventListener('click', () => navigateTo('./aniversario2.html'));
+  </script>
+</body>
+</html>
