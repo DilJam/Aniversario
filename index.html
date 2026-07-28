@@ -337,6 +337,147 @@
       to   { opacity:0; transform: scale(0.97); filter: blur(2px); }
     }
 
+    /* ── LOCK SCREEN ── */
+    .lock-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(ellipse at center, #1a0a3e 0%, #080818 100%);
+      backdrop-filter: blur(8px);
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    .lock-overlay.unlocked {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .lock-container {
+      text-align: center;
+      padding: 40px 32px;
+      border-radius: 24px;
+      background: rgba(10, 5, 30, 0.85);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(167,139,250,0.25);
+      box-shadow:
+        0 0 0 1px rgba(167,139,250,0.08),
+        0 24px 64px rgba(0,0,0,0.55),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      width: min(400px, 90vw);
+      animation: fadeIn 0.8s ease both;
+    }
+
+    .lock-icon {
+      font-size: 64px;
+      margin-bottom: 16px;
+      display: block;
+      animation: lockPulse 2s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(167,139,250,0.6));
+    }
+    @keyframes lockPulse {
+      0%,100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(167,139,250,0.6)); }
+      50%      { transform: scale(1.08); filter: drop-shadow(0 0 40px rgba(167,139,250,0.9)); }
+    }
+
+    .lock-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 28px;
+      color: #a78bfa;
+      text-shadow: 0 0 10px rgba(167,139,250,0.7);
+      margin-bottom: 8px;
+    }
+
+    .lock-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+    .lock-subtitle strong {
+      color: #e9d5ff;
+    }
+
+    .lock-input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .lock-input {
+      background: rgba(20, 8, 50, 0.8);
+      border: 1.5px solid rgba(167,139,250,0.3);
+      border-radius: 12px;
+      padding: 14px 16px;
+      color: #e9d5ff;
+      font-family: 'Indie Flower', cursive;
+      font-size: 20px;
+      text-align: center;
+      letter-spacing: 3px;
+      outline: none;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .lock-input:focus {
+      border-color: rgba(167,139,250,0.8);
+      box-shadow: 0 0 20px rgba(167,139,250,0.2);
+    }
+    .lock-input::placeholder {
+      color: rgba(196,181,253,0.4);
+      font-size: 14px;
+      letter-spacing: 1px;
+    }
+    .lock-input.error {
+      border-color: rgba(239, 68, 68, 0.7);
+      animation: shake 0.4s ease;
+    }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%     { transform: translateX(-8px); }
+      40%     { transform: translateX(8px); }
+      60%     { transform: translateX(-5px); }
+      80%     { transform: translateX(5px); }
+    }
+
+    .lock-btn {
+      cursor: pointer;
+      border: 1.5px solid rgba(167,139,250,0.4);
+      background: linear-gradient(135deg, rgba(124,58,237,0.4), rgba(236,72,153,0.3));
+      color: #e9d5ff;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 18px;
+      font-family: 'Indie Flower', cursive;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .lock-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(124,58,237,0.4);
+      border-color: rgba(167,139,250,0.8);
+    }
+    .lock-btn:active {
+      transform: translateY(0);
+    }
+
+    .lock-error-msg {
+      font-size: 13px;
+      color: rgba(239, 68, 68, 0.8);
+      min-height: 20px;
+      margin-top: 8px;
+      transition: opacity 0.3s ease;
+    }
+
+    .lock-hint {
+      margin-top: 16px;
+      font-size: 12px;
+      color: rgba(196,181,253,0.4);
+      line-height: 1.4;
+    }
+
     @media (max-width: 480px) {
       .btn { min-width: 90%; }
     }
@@ -348,6 +489,29 @@
   </style>
 </head>
 <body>
+
+  <!-- ── LOCK SCREEN ── -->
+  <div class="lock-overlay" id="lockOverlay">
+    <div class="lock-container">
+      <span class="lock-icon">🔒</span>
+      <div class="lock-title">Solo para nosotros 💜</div>
+      <div class="lock-subtitle">
+        Ingresa la <strong>fecha especial</strong> para desbloquear nuestros recuerdos<br>
+        <small>(formato: DD/MM/AAAA)</small>
+      </div>
+      <div class="lock-input-group">
+        <input
+          class="lock-input" id="lockInput" type="text"
+          placeholder="Ej: 15/06/2023"
+          maxlength="10"
+          autocomplete="off"
+        />
+        <button class="lock-btn" id="lockBtn" type="button">🔓 Desbloquear</button>
+      </div>
+      <div class="lock-error-msg" id="lockError"></div>
+      <div class="lock-hint">💜 Solo tú sabes esta fecha — es nuestra magia</div>
+    </div>
+  </div>
 
   <!-- Orbs de luz -->
   <div class="orb" style="width:280px;height:280px;left:-80px;top:-80px;background:radial-gradient(circle,#7c3aed,transparent 65%);animation-duration:8s;"></div>
@@ -395,6 +559,26 @@
         </span>
         <span class="btn-badge">💙</span>
         <span class="btn-heart">siempre · contigo</span>
+      </button>
+
+      <button class="btn blue" id="open3" type="button" aria-label="Ver el tercer aniversario">
+        <span class="btn-door-icon">✨</span>
+        <span class="btn-label">
+          <span class="btn-code">Door · 03</span>
+          <span class="btn-name">Tercer aniversario</span>
+        </span>
+        <span class="btn-badge">❤️</span>
+        <span class="btn-heart">siempre · contigo</span>
+      </button>
+
+      <button class="btn blue" id="open4" type="button" aria-label="Ver el cuarto aniversario">
+        <span class="btn-door-icon">💜</span>
+        <span class="btn-label">
+          <span class="btn-code">Door · 04</span>
+          <span class="btn-name">Cuarto aniversario</span>
+        </span>
+        <span class="btn-badge">💜</span>
+        <span class="btn-heart">Zuliban · y la niña</span>
       </button>
     </div>
 
@@ -448,6 +632,86 @@
     }
     document.getElementById('open1').addEventListener('click', () => navigateTo('./aniversario1.html'));
     document.getElementById('open2').addEventListener('click', () => navigateTo('./aniversario2.html'));
+    document.getElementById('open3').addEventListener('click', () => navigateTo('./aniversario3.html'));
+    document.getElementById('open4').addEventListener('click', () => navigateTo('./aniversaio4.html'));
+
+    /* ── LOCK SCREEN ── */
+    (function() {
+      const CORRECT_DATE = '28/04/2026'; // ← CAMBIA ESTO por la fecha especial (formato DD/MM/AAAA)
+
+      const lockOverlay = document.getElementById('lockOverlay');
+      const lockInput = document.getElementById('lockInput');
+      const lockBtn = document.getElementById('lockBtn');
+      const lockError = document.getElementById('lockError');
+
+      function checkDate() {
+        const val = lockInput.value.trim();
+        if (!val) {
+          lockError.textContent = '💜 Ingresa una fecha...';
+          lockInput.classList.add('error');
+          return;
+        }
+
+        // Normalizar: eliminar espacios y convertir a mayúsculas
+        const normalized = val.replace(/\s/g, '').toUpperCase();
+        const expected = CORRECT_DATE.replace(/\s/g, '').toUpperCase();
+
+        if (normalized === expected) {
+          // ✅ Correcto
+          lockError.textContent = '';
+          lockInput.classList.remove('error');
+          lockOverlay.classList.add('unlocked');
+
+          // Animación de candado abierto
+          const icon = lockOverlay.querySelector('.lock-icon');
+          icon.textContent = '🔓';
+
+          // Disparar confetti-like effect con partículas
+          for (let i = 0; i < 20; i++) {
+            setTimeout(() => {
+              const p = document.createElement('div');
+              p.className = 'particle';
+              p.textContent = ['💜','✨','💕','🫶','💜','🌹'][Math.floor(Math.random() * 6)];
+              p.style.cssText = `
+                left:${Math.random()*100}vw;
+                font-size:${Math.random()*12+16}px;
+                animation-duration:${Math.random()*3+3}s;
+                animation-delay:0s;
+                --drift:${Math.random()*80-40}px;
+                opacity:1;
+              `;
+              document.body.appendChild(p);
+              setTimeout(() => p.remove(), 5000);
+            }, i * 80);
+          }
+        } else {
+          // ❌ Incorrecto
+          lockError.textContent = '❌ Fecha incorrecta... Intenta de nuevo, mi amor 💜';
+          lockInput.classList.add('error');
+          lockInput.value = '';
+          lockInput.focus();
+
+          // Quitar error después de 2s
+          setTimeout(() => {
+            lockInput.classList.remove('error');
+          }, 600);
+        }
+      }
+
+      lockBtn.addEventListener('click', checkDate);
+      lockInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') checkDate();
+      });
+
+      // Auto-formato: agregar barras automáticamente
+      lockInput.addEventListener('input', (e) => {
+        let val = e.target.value.replace(/[^0-9]/g, '');
+        if (val.length > 2) val = val.slice(0,2) + '/' + val.slice(2);
+        if (val.length > 5) val = val.slice(0,5) + '/' + val.slice(5);
+        if (val.length > 10) val = val.slice(0,10);
+        e.target.value = val;
+      });
+    })();
   </script>
 </body>
 </html>

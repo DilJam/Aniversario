@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ohana significa familia - 3 Meses</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes:wght@500;700&display=swap');
+
+        :root {
+            --stitch-blue: #4a6cff;
+            --stitch-purple: #5e47d2;
+            --stitch-cyan: #81d8f7;
+            --stitch-rose: #ff7eb8;
+            --stitch-sand: #fff5e6;
+            --stitch-night: #23294d;
+            --stitch-shadow: rgba(74, 108, 255, 0.16);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            color: var(--stitch-night);
+            background-image:
+                radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px),
+                radial-gradient(circle, rgba(255,255,255,0.55) 1px, transparent 1px),
+                linear-gradient(180deg, #091a3d 0%, #3b5fb8 45%, #ffdde6 100%);
+            background-size: 22px 22px, 44px 44px, auto;
+            background-position: 0 0, 11px 18px, 0 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 24px;
+            overflow-x: hidden;
+        }
+
+        body::before,
+        body::after {
+            content: '';
+            position: fixed;
+            width: 240px;
+            height: 240px;
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.55;
+            pointer-events: none;
+        }
+
+        body::before {
+            top: -90px;
+            left: -90px;
+            background: rgba(129, 216, 247, 0.42);
+        }
+
+        body::after {
+            bottom: -110px;
+            right: -110px;
+            background: rgba(255, 126, 184, 0.30);
+        }
+
+        .intro-screen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(255, 255, 255, 0.22), transparent 55%),
+                        linear-gradient(135deg, #4a6cff, #ff7eb8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 999;
+            text-align: center;
+            padding: 28px;
+            transition: opacity 0.7s ease, visibility 0.7s ease;
+        }
+
+        .intro-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .intro-icon {
+            font-size: 80px;
+            margin-bottom: 18px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .intro-screen h2 {
+            margin: 0 0 16px;
+            font-size: 32px;
+            color: #fff;
+            letter-spacing: 1px;
+        }
+
+        .intro-screen p {
+            margin: 0 0 28px;
+            max-width: 420px;
+            font-size: 17px;
+            line-height: 1.7;
+            color: rgba(255, 241, 249, 0.94);
+        }
+
+        .btn-intro {
+            border: none;
+            border-radius: 999px;
+            padding: 14px 38px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            background: linear-gradient(135deg, #5e47d2, #81d8f7);
+            cursor: pointer;
+            box-shadow: 0 14px 32px rgba(74, 108, 255, 0.28);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .btn-intro:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 36px rgba(74, 108, 255, 0.36);
+        }
+
+        .btn-secondary {
+            margin-top: 14px;
+            border: 1px solid rgba(255,255,255,0.65);
+            background: rgba(255,255,255,0.16);
+            color: #fff;
+            padding: 12px 34px;
+            border-radius: 999px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.28);
+            transform: translateY(-1px);
+        }
+
+        .month-card {
+            position: relative;
+            width: min(540px, 100%);
+            padding: 40px 36px;
+            border-radius: 32px;
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(129, 216, 247, 0.55);
+            box-shadow: 0 28px 60px var(--stitch-shadow);
+            overflow: hidden;
+        }
+
+        .month-card::before {
+            content: '';
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle, rgba(129, 216, 247, 0.35), transparent 55%);
+            top: -70px;
+            right: -90px;
+            pointer-events: none;
+        }
+
+        .month-card::after {
+            content: '';
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, rgba(255, 126, 184, 0.24), transparent 60%);
+            bottom: -70px;
+            left: -60px;
+            pointer-events: none;
+        }
+
+        .badge-container {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 24px;
+        }
+
+        .badge-3 {
+            width: 112px;
+            height: 112px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #4a6cff, #81d8f7);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 800;
+            box-shadow: 0 14px 34px rgba(74, 108, 255, 0.24);
+            position: relative;
+        }
+
+        .badge-3::before,
+        .badge-3::after {
+            content: '💙';
+            position: absolute;
+            font-size: 32px;
+            color: rgba(255, 255, 255, 0.65);
+        }
+
+        .badge-3::before { top: 12px; left: 18px; }
+        .badge-3::after { bottom: 16px; right: 18px; }
+
+        h1 {
+            margin: 0;
+            font-size: 30px;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+        }
+
+        .timeline-tag {
+            display: inline-block;
+            margin: 16px auto 32px;
+            padding: 8px 18px;
+            border-radius: 999px;
+            background: rgba(129, 216, 247, 0.20);
+            color: #3b3d8e;
+            font-size: 12px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .stitch-scene {
+            display: block;
+            margin: 0 auto 22px;
+            padding: 10px 16px;
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 10px 28px rgba(74, 108, 255, 0.08);
+            max-width: 340px;
+            text-align: center;
+        }
+
+        .stitch-scene img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 24px;
+            object-fit: cover;
+            min-height: 220px;
+            background: #e7f1ff;
+        }
+
+        .scene-caption {
+            margin-top: 12px;
+            color: #47526a;
+            font-size: 14px;
+        }
+
+        .stat-box {
+            background: rgba(129, 216, 247, 0.14);
+            border-radius: 18px;
+            padding: 18px 14px;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.7);
+            display: grid;
+            grid-template-rows: auto auto;
+            justify-items: center;
+            gap: 10px;
+        }
+
+        .stat-icon {
+            font-size: 20px;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--stitch-blue);
+            display: block;
+        }
+
+        .stat-label {
+            margin-top: 0;
+            font-size: 11px;
+            color: #47526a;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .message-body {
+            font-size: 19px;
+            line-height: 1.9;
+            color: #2f2c45;
+            text-align: left;
+            margin-bottom: 36px;
+            font-family: 'Great Vibes', 'Brush Script MT', cursive;
+        }
+
+        .message-body p {
+            margin: 0 0 18px;
+        }
+
+        .message-body strong {
+            color: #3b3d8e;
+        }
+
+        .message-body em {
+            color: #5e47d2;
+        }
+
+        .btn-return {
+            display: inline-block;
+            text-decoration: none;
+            padding: 14px 34px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, #4a6cff, #ff7eb8);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 0 14px 28px rgba(74, 108, 255, 0.20);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .btn-return:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 34px rgba(74, 108, 255, 0.28);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ==========================================
+         PANTALLA DE INTRODUCCIÓN
+         ========================================== -->
+    <div class="intro-screen" id="introScreen">
+        <div class="intro-icon">🚀💖</div>
+        <h2>¡FELICES 3 MESES, MI PRINCESA👑!</h2>
+        <p>Hace tres meses, el universo alineó las estrellas para que mi corazón encontrara su verdadero hogar en ti.</p>
+        <button class="btn-intro" onclick="entrarALaTarjeta()">Abrir nuestro 3er mes</button>
+        <a class="btn-secondary" href="index.html">Regresar </a>
+    </div>
+
+    <!-- ==========================================
+         TARJETA PRINCIPAL (CONTENIDO)
+         ========================================== -->
+    <main class="month-card">
+        
+        <div class="badge-container">
+            <div class="badge-3">3</div>
+        </div>
+
+        <header>
+            <h1>3 meses con mi persona favorito</h1>
+            <span class="timeline-tag">Ohana, amor y magia azul</span>
+        </header>
+
+        <div class="stitch-scene">
+            <img id="stitchImage" src="./stitch-angela.jpeg" alt="Imagen romántica en la noche" />
+        </div>
+        <section class="stats-grid">
+            <div class="stat-box">
+                <span class="stat-icon">💙</span>
+                <span class="stat-number">90</span>
+                <span class="stat-label">Días de Ohana</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-icon">🌙</span>
+                <span class="stat-number">2160</span>
+                <span class="stat-label">Horas de cariño</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-icon">🐾</span>
+                <span class="stat-number">∞</span>
+                <span class="stat-label">Momentos juntos</span>
+            </div>
+        </section>
+
+        <section class="message-body">
+            <p><strong>¡✨Feliz aniversario❤️‍🔥!</strong> Dicen que un hogar no es un lugar, sino una persona. Y yo te encontré a ti.</p>
+            <p>Gracias por ser mi compañera de aventuras, por amar mis "locuras" como si fueran travesuras de un alienígena azul y 
+                por convertir cada día ordinario en una expedición inolvidable. 
+                Eres mi pedacito de galaxia favorito, mi tierra prometida y mi razón para sonreír.</p>
+            <p>Este capítulo es azul, tierno y lleno de amor. Te amo un montón, hoy y en todos los meses que vengan. ✨</p>
+        </section>
+
+        <footer>
+            <button class="btn-return" onclick="volverAIntro()">Volver</button>
+        </footer>
+    </main>
+
+    <!-- ==========================================
+         LÓGICA JAVASCRIPT (Control de la Intro)
+         ========================================== -->
+    <script>
+        function entrarALaTarjeta() {
+            const intro = document.getElementById('introScreen');
+            intro.classList.add('hidden');
+        }
+
+        function volverAIntro() {
+            const intro = document.getElementById('introScreen');
+            intro.classList.remove('hidden');
+        }
+
+        function cargarImagenDeStich() {
+            const img = document.getElementById('stitchImage');
+            // Fallback: si el local falla o no existe, recién ahí intentamos con Unsplash.
+            const localSrc = img.getAttribute('src');
+
+            // Si el local ya está cargando (o cargó), no lo sobrescribimos.
+            // Solo intentamos Unsplash si el local dispara error.
+            img.onerror = () => {
+                const query = 'Lilo and Stitch romantic night scene illustration';
+                const apiUrl = 'https://source.unsplash.com/680x320/?' + encodeURIComponent(query);
+
+                img.onerror = () => {
+                    img.alt = 'No se pudo cargar la imagen. Intenta nuevamente.';
+                    img.style.background = '#fbe9f7';
+                };
+
+                img.onload = () => {
+                    img.alt = 'Imagen romántica de Lilo y Stitch en la noche';
+                };
+
+                img.src = apiUrl;
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', cargarImagenDeStich);
+    </script>
+
+</body>
+</html>
