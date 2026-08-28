@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Monstruos Enamorados ❤️</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://w3.org viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️‍🔥</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>❤️‍🔥</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Indie+Flower&display=swap" rel="stylesheet">
@@ -15,6 +15,7 @@
       --purple-glow: rgba(124, 58, 237, 0.55);
       --pink-glow:   rgba(236, 72, 153, 0.50);
       --blue-glow:   rgba(37, 99, 235,  0.45);
+      --gold-glow:   rgba(245, 158, 11, 0.50);
       --text-main:   #e9d5ff;
       --text-muted:  #c4b5fd;
     }
@@ -36,7 +37,6 @@
       position: relative;
     }
 
-    /* ── ESTRELLAS ESTÁTICAS ── */
     .star {
       position: fixed;
       border-radius: 50%;
@@ -50,7 +50,6 @@
       50%      { opacity: 1;   transform: scale(1.4); }
     }
 
-    /* ── SCAN LINE ── */
     .scan-line {
       position: fixed;
       left: 0; right: 0; top: 0;
@@ -65,7 +64,6 @@
       100% { top: 100vh; opacity: 0; }
     }
 
-    /* ── ORBS DE LUZ ── */
     .orb {
       position: fixed;
       border-radius: 50%;
@@ -79,7 +77,6 @@
       50%      { transform: scale(1.12); opacity: 0.38; }
     }
 
-    /* ── PARTÍCULAS FLOTANTES ── */
     .particle {
       position: fixed;
       bottom: -40px;
@@ -94,7 +91,6 @@
       100% { transform: translateY(-110vh) translateX(var(--drift,0px)) rotate(340deg) scale(1.2); opacity: 0; }
     }
 
-    /* ── SHELL PRINCIPAL ── */
     .shell {
       position: relative;
       z-index: 2;
@@ -104,10 +100,7 @@
       background: rgba(10, 5, 30, 0.72);
       backdrop-filter: blur(14px);
       border: 1px solid rgba(167,139,250,0.25);
-      box-shadow:
-        0 0 0 1px rgba(167,139,250,0.08),
-        0 24px 64px rgba(0,0,0,0.55),
-        inset 0 1px 0 rgba(255,255,255,0.06);
+      box-shadow: 0 0 0 1px rgba(167,139,250,0.08), 0 24px 64px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
       text-align: center;
       animation: fadeIn 1.1s ease both;
     }
@@ -116,17 +109,12 @@
       to   { opacity: 1; transform: translateY(0)    scale(1);    }
     }
 
-    /* Borde animado con gradiente */
     .shell::before {
       content: "";
       position: absolute;
       inset: -1px;
       border-radius: 25px;
-      background: linear-gradient(135deg,
-        rgba(167,139,250,0.4) 0%,
-        rgba(236,72,153,0.3) 40%,
-        rgba(59,130,246,0.35) 80%,
-        rgba(167,139,250,0.4) 100%);
+      background: linear-gradient(135deg, rgba(167,139,250,0.4) 0%, rgba(236,72,153,0.3) 40%, rgba(59,130,246,0.35) 80%, rgba(167,139,250,0.4) 100%);
       z-index: -1;
       animation: borderGlow 6s linear infinite;
       mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
@@ -139,14 +127,12 @@
       100% { filter: hue-rotate(360deg); }
     }
 
-    /* ── OJOS DE MONSTRUO ── */
     .eyes {
       display: flex;
       justify-content: center;
       gap: 10px;
       margin-bottom: 18px;
     }
-
     .eye {
       width: 58px;
       height: 58px;
@@ -171,7 +157,6 @@
       0%,42%,58%,100% { transform: scaleY(1); }
       50%              { transform: scaleY(0.06); }
     }
-
     .pupil {
       width: 24px;
       height: 24px;
@@ -199,14 +184,11 @@
       80%     { transform: translate(-2px,-2px); }
     }
 
-    /* ── TÍTULO ── */
     .title {
       font-family: 'Dancing Script', cursive;
       font-size: clamp(32px, 6vw, 48px);
       color: #a78bfa;
-      text-shadow:
-        0 0 10px rgba(167,139,250,0.7),
-        0 0 30px rgba(167,139,250,0.3);
+      text-shadow: 0 0 10px rgba(167,139,250,0.7), 0 0 30px rgba(167,139,250,0.3);
       margin-bottom: 12px;
       line-height: 1.15;
       animation: titlePulse 4s ease-in-out infinite;
@@ -226,7 +208,6 @@
       margin-right: auto;
     }
 
-    /* ── BOTONES ── */
     .buttons {
       display: flex;
       gap: 16px;
@@ -277,6 +258,18 @@
       border-color: rgba(96,165,250,0.8);
     }
 
+    .btn.gold {
+      border-color: rgba(245, 158, 11, 0.4);
+      color: #fef3c7;
+    }
+    .btn.gold:hover {
+      box-shadow: 0 16px 40px rgba(245, 158, 11, 0.45), 0 0 0 1px rgba(251, 191, 36, 0.6);
+      border-color: rgba(251, 191, 36, 0.8);
+    }
+    .btn.gold:hover .btn-door-icon {
+      filter: drop-shadow(0 0 14px rgba(251, 191, 36, 0.9));
+    }
+
     .btn-door-icon {
       font-size: 34px;
       flex-shrink: 0;
@@ -322,14 +315,12 @@
       color: rgba(244,114,182,0.6);
     }
 
-    /* ── HINT ── */
     .hint {
       margin-top: 22px;
       font-size: 13px;
       color: rgba(196,181,253,0.6);
     }
 
-    /* ── EXIT ── */
     body.exiting .shell {
       animation: fadeOut .45s ease forwards;
     }
@@ -338,7 +329,6 @@
       to   { opacity:0; transform: scale(0.97); filter: blur(2px); }
     }
 
-    /* ── LOCK SCREEN ── */
     .lock-overlay {
       position: fixed;
       inset: 0;
@@ -347,8 +337,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background:
-        radial-gradient(ellipse at center, #1a0a3e 0%, #080818 100%);
+      background: radial-gradient(ellipse at center, #1a0a3e 0%, #080818 100%);
       backdrop-filter: blur(8px);
       transition: opacity 0.8s ease, visibility 0.8s ease;
     }
@@ -365,10 +354,7 @@
       background: rgba(10, 5, 30, 0.85);
       backdrop-filter: blur(14px);
       border: 1px solid rgba(167,139,250,0.25);
-      box-shadow:
-        0 0 0 1px rgba(167,139,250,0.08),
-        0 24px 64px rgba(0,0,0,0.55),
-        inset 0 1px 0 rgba(255,255,255,0.06);
+      box-shadow: 0 0 0 1px rgba(167,139,250,0.08), 0 24px 64px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
       width: min(400px, 90vw);
       animation: fadeIn 0.8s ease both;
     }
@@ -399,9 +385,7 @@
       margin-bottom: 24px;
       line-height: 1.5;
     }
-    .lock-subtitle strong {
-      color: #e9d5ff;
-    }
+    .lock-subtitle strong { color: #e9d5ff; }
 
     .lock-input-group {
       display: flex;
@@ -460,9 +444,7 @@
       box-shadow: 0 12px 30px rgba(124,58,237,0.4);
       border-color: rgba(167,139,250,0.8);
     }
-    .lock-btn:active {
-      transform: translateY(0);
-    }
+    .lock-btn:active { transform: translateY(0); }
 
     .lock-error-msg {
       font-size: 13px;
@@ -479,10 +461,7 @@
       line-height: 1.4;
     }
 
-    @media (max-width: 480px) {
-      .btn { min-width: 90%; }
-    }
-
+    @media (max-width: 480px) { .btn { min-width: 90%; } }
     @media (prefers-reduced-motion: reduce) {
       .star, .particle, .scan-line { display: none; }
       * { animation: none !important; transition: none !important; }
@@ -491,7 +470,6 @@
 </head>
 <body>
 
-  <!-- ── LOCK SCREEN ── -->
   <div class="lock-overlay" id="lockOverlay">
     <div class="lock-container">
       <span class="lock-icon">🔒</span>
@@ -501,12 +479,7 @@
         <small>(formato: DD/MM/AAAA)</small>
       </div>
       <div class="lock-input-group">
-        <input
-          class="lock-input" id="lockInput" type="text"
-          placeholder="Ej: 15/06/2023"
-          maxlength="10"
-          autocomplete="off"
-        />
+        <input class="lock-input" id="lockInput" type="text" placeholder="Ej: 15/06/2023" maxlength="10" autocomplete="off" />
         <button class="lock-btn" id="lockBtn" type="button">🔓 Desbloquear</button>
       </div>
       <div class="lock-error-msg" id="lockError"></div>
@@ -514,28 +487,19 @@
     </div>
   </div>
 
-  <!-- Orbs de luz -->
   <div class="orb" style="width:280px;height:280px;left:-80px;top:-80px;background:radial-gradient(circle,#7c3aed,transparent 65%);animation-duration:8s;"></div>
   <div class="orb" style="width:220px;height:220px;right:-60px;bottom:-60px;background:radial-gradient(circle,#ec4899,transparent 65%);animation-duration:10s;animation-delay:2s;"></div>
   <div class="orb" style="width:160px;height:160px;left:45%;bottom:5%;background:radial-gradient(circle,#1d4ed8,transparent 65%);animation-duration:12s;animation-delay:4s;"></div>
 
-  <!-- Scan -->
   <div class="scan-line"></div>
 
-  <!-- Tarjeta principal -->
   <div class="shell" role="main" aria-label="Selección de aniversarios">
-
     <div class="eyes">
-      <div class="eye yellow" aria-hidden="true">
-        <div class="pupil"></div>
-      </div>
-      <div class="eye pink" aria-hidden="true">
-        <div class="pupil" style="animation-delay:1.2s;"></div>
-      </div>
+      <div class="eye yellow" aria-hidden="true"><div class="pupil"></div></div>
+      <div class="eye pink" aria-hidden="true"><div class="pupil" style="animation-delay:1.2s;"></div></div>
     </div>
 
     <div class="title">✨ Monsters in Love ✨</div>
-
     <div class="subtitle">
       Aquí también hay monstruos, pero son los que te hacen reír, suspirar y querer volver siempre.
       Cada puerta esconde un recuerdo que es solo nuestro 💜
@@ -581,64 +545,90 @@
         <span class="btn-badge">💜</span>
         <span class="btn-heart">Zuliban · y la niña</span>
       </button>
+
+      <button class="btn gold" id="open5" type="button" aria-label="Ver el quinto aniversario">
+        <span class="btn-door-icon">🌼</span>
+        <span class="btn-label">
+          <span class="btn-code">Door · 05</span>
+          <span class="btn-name">Quinto aniversario</span>
+        </span>
+        <span class="btn-badge">💛</span>
+        <span class="btn-heart">Rapunzel · y su luz</span>
+      </button>
     </div>
 
     <div class="hint">🌀 Cada puerta tiene su magia — y tú eres la mejor sorpresa de todas 💜</div>
   </div>
 
   <script>
-    /* ── Stars ── */
     function spawnStar(){
       const s = document.createElement('div');
       s.className = 'star';
       const size = Math.random() * 2.5 + 1;
-      s.style.cssText = `
-        width:${size}px; height:${size}px;
-        left:${Math.random()*100}vw;
-        top:${Math.random()*100}vh;
-        animation-duration:${Math.random()*2.5+2.5}s;
-        animation-delay:${Math.random()*3}s;
-        opacity:${0.25+Math.random()*0.6};
-      `;
+      s.style.cssText = `width:${size}px; height:${size}px; left:${Math.random()*100}vw; top:${Math.random()*100}vh; animation-duration:${Math.random()*2.5+2.5}s; animation-delay:${Math.random()*3}s; opacity:${0.25+Math.random()*0.6};`;
       document.body.appendChild(s);
     }
     for(let i=0;i<60;i++) spawnStar();
 
-    /* ── Particles ── */
     const emojis = ['💜','🫶','💙','✨','💕','🌀','👁️','💡','⚡','🔮','🫀','💫'];
     function spawnParticle(){
       const p = document.createElement('div');
       p.className = 'particle';
       p.textContent = emojis[Math.floor(Math.random()*emojis.length)];
       const dur = Math.random()*5 + 6;
-      p.style.cssText = `
-        left:${Math.random()*100}vw;
-        font-size:${Math.random()*12+16}px;
-        animation-duration:${dur}s;
-        animation-delay:${Math.random()*2}s;
-        --drift:${Math.random()*100-50}px;
-        opacity:${0.55+Math.random()*0.3};
-      `;
+      p.style.cssText = `left:${Math.random()*100}vw; font-size:${Math.random()*12+16}px; animation-duration:${dur}s; animation-delay:${Math.random()*2}s; --drift:${Math.random()*100-50}px; opacity:${0.55+Math.random()*0.3};`;
       document.body.appendChild(p);
       setTimeout(() => p.remove(), (dur+2)*1000);
     }
     for(let i=0;i<30;i++) setTimeout(spawnParticle, i*280);
     setInterval(spawnParticle, 600);
 
-    /* ── Navigation ── */
-    function navigateTo(url){
-      document.body.classList.add('exiting');
+    /* ── NAVEGACIÓN SUAVE CON TRANSICIÓN DE TEMA ── */
+    function navigateTo(url, themeBg) {
       document.querySelectorAll('.btn').forEach(b => b.disabled = true);
-      setTimeout(() => window.location.href = url, 430);
-    }
-    document.getElementById('open1').addEventListener('click', () => navigateTo('./aniversario1.html'));
-    document.getElementById('open2').addEventListener('click', () => navigateTo('./aniversario2.html'));
-    document.getElementById('open3').addEventListener('click', () => navigateTo('./aniversario3.html'));
-    document.getElementById('open4').addEventListener('click', () => navigateTo('./aniversaio4.html'));
+      document.body.classList.add('exiting');
+      
+      let overlay = document.getElementById('page-transition');
+      if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'page-transition';
+        overlay.style.cssText = `
+          position: fixed; inset: 0; z-index: 9998;
+          background: ${themeBg};
+          opacity: 0; pointer-events: none;
+          transition: opacity 0.5s ease;
+        `;
+        document.body.appendChild(overlay);
+      } else {
+        overlay.style.background = themeBg;
+      }
+      
+      requestAnimationFrame(() => {
+        overlay.style.opacity = '1';
+      });
 
-    /* ── LOCK SCREEN ── */
+      setTimeout(() => {
+        window.location.href = url;
+      }, 500);
+    }
+
+    document.getElementById('open1').addEventListener('click', () => 
+      navigateTo('./aniversario1.html', 'linear-gradient(180deg, #1a0b2e 0%, #2d1b4e 50%, #4a2c6d 100%)'));
+    
+    document.getElementById('open2').addEventListener('click', () => 
+      navigateTo('./aniversario2.html', 'linear-gradient(180deg, #0f172a 0%, #1e3a8a 100%)'));
+    
+    document.getElementById('open3').addEventListener('click', () => 
+      navigateTo('./aniversario3.html', 'linear-gradient(180deg, #1e1b4b 0%, #312e81 100%)'));
+    
+    document.getElementById('open4').addEventListener('click', () => 
+      navigateTo('./aniversaio4.html', 'linear-gradient(180deg, #2e1065 0%, #581c87 100%)'));
+    
+    document.getElementById('open5').addEventListener('click', () => 
+      navigateTo('./aniversario5.html', 'linear-gradient(180deg, #2a1b4e 0%, #4a2c6d 40%, #d4a574 85%, #f5d78e 100%)'));
+
     (function() {
-      const CORRECT_DATE = '28/04/2026'; // ← CAMBIA ESTO por la fecha especial (formato DD/MM/AAAA)
+      const CORRECT_DATE = '28/03/2026';
 
       const lockOverlay = document.getElementById('lockOverlay');
       const lockInput = document.getElementById('lockInput');
@@ -653,58 +643,39 @@
           return;
         }
 
-        // Normalizar: eliminar espacios y convertir a mayúsculas
         const normalized = val.replace(/\s/g, '').toUpperCase();
         const expected = CORRECT_DATE.replace(/\s/g, '').toUpperCase();
 
         if (normalized === expected) {
-          // ✅ Correcto
           lockError.textContent = '';
           lockInput.classList.remove('error');
           lockOverlay.classList.add('unlocked');
 
-          // Animación de candado abierto
           const icon = lockOverlay.querySelector('.lock-icon');
           icon.textContent = '🔓';
 
-          // Disparar confetti-like effect con partículas
           for (let i = 0; i < 20; i++) {
             setTimeout(() => {
               const p = document.createElement('div');
               p.className = 'particle';
-              p.textContent = ['💜','✨','💕','🫶','💜','🌹'][Math.floor(Math.random() * 6)];
-              p.style.cssText = `
-                left:${Math.random()*100}vw;
-                font-size:${Math.random()*12+16}px;
-                animation-duration:${Math.random()*3+3}s;
-                animation-delay:0s;
-                --drift:${Math.random()*80-40}px;
-                opacity:1;
-              `;
+              p.textContent = ['💜','✨','💕','🫶','💛','🌼'][Math.floor(Math.random() * 6)];
+              p.style.cssText = `left:${Math.random()*100}vw; font-size:${Math.random()*12+16}px; animation-duration:${Math.random()*3+3}s; animation-delay:0s; --drift:${Math.random()*80-40}px; opacity:1;`;
               document.body.appendChild(p);
               setTimeout(() => p.remove(), 5000);
             }, i * 80);
           }
         } else {
-          // ❌ Incorrecto
           lockError.textContent = '❌ Fecha incorrecta... Intenta de nuevo, mi amor 💜';
           lockInput.classList.add('error');
           lockInput.value = '';
           lockInput.focus();
-
-          // Quitar error después de 2s
-          setTimeout(() => {
-            lockInput.classList.remove('error');
-          }, 600);
+          setTimeout(() => { lockInput.classList.remove('error'); }, 600);
         }
       }
 
       lockBtn.addEventListener('click', checkDate);
-      lockInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') checkDate();
-      });
+      lockInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkDate(); });
 
-      // Auto-formato: agregar barras automáticamente
       lockInput.addEventListener('input', (e) => {
         let val = e.target.value.replace(/[^0-9]/g, '');
         if (val.length > 2) val = val.slice(0,2) + '/' + val.slice(2);
@@ -713,6 +684,16 @@
         e.target.value = val;
       });
     })();
+
+    // ── SOLUCIÓN AL BOTÓN "ATRÁS" DEL NAVEGADOR ──
+    window.addEventListener('pageshow', function (event) {
+      if (event.persisted) {
+        document.body.classList.remove('exiting');
+        document.querySelectorAll('.btn').forEach(b => {
+          b.disabled = false;
+        });
+      }
+    });
   </script>
 </body>
 </html>
