@@ -719,6 +719,11 @@
       const lockBtn = document.getElementById('lockBtn');
       const lockError = document.getElementById('lockError');
 
+      /* Al cargar, el index está cerrado: borramos la marca de
+         "pasó por el index" para que nadie entre a los aniversarios
+         sin pasar antes por aquí. */
+      try { sessionStorage.removeItem('anv_ok'); } catch (e) {}
+
       async function checkDate() {
         const val = lockInput.value.trim();
         if (!val) {
@@ -735,7 +740,11 @@
         lockBtn.disabled = false;
 
         if (digest === SECRET_HASH) {
+          /* ✅ Marca de que pasaste por el index: gate.js la lee para
+             abrir los aniversarios. Vive solo mientras el index siga
+             desbloqueado (se borra al recargar o volver atrás). */
           try { sessionStorage.setItem('anv_ok', '1'); } catch (e) {}
+
           lockError.textContent = '';
           lockInput.classList.remove('error');
           lockOverlay.classList.add('unlocked');
@@ -781,6 +790,21 @@
         document.querySelectorAll('.btn').forEach(b => {
           b.disabled = false;
         });
+
+        // 🔐 La puerta se vuelve a cerrar si regresas con "atrás":
+        // el index nunca puede quedar abierto sin la fecha correcta,
+        // y al cerrarse se borra la marca de los aniversarios.
+        try { sessionStorage.removeItem('anv_ok'); } catch (e) {}
+        const gateOverlay = document.getElementById('lockOverlay');
+        if (gateOverlay && gateOverlay.classList.contains('unlocked')) {
+          gateOverlay.classList.remove('unlocked');
+          const gateIcon = gateOverlay.querySelector('.lock-icon');
+          if (gateIcon) gateIcon.textContent = '🔒';
+          const gateError = document.getElementById('lockError');
+          if (gateError) gateError.textContent = '';
+          const gateInput = document.getElementById('lockInput');
+          if (gateInput) { gateInput.value = ''; gateInput.focus(); }
+        }
       }
     });
   </script>

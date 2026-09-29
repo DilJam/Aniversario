@@ -8,10 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Indie+Flower&family=Scheherazade+New:wght@400;700&display=swap" rel="stylesheet">
-<script>
-  /* Si ya se desbloqueó en el inicio, saltamos la puerta sin parpadeo */
-  try { if (sessionStorage.getItem('anv_ok') === '1') document.documentElement.classList.add('unlocked'); } catch (e) {}
-</script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -147,114 +143,6 @@
   }
   .rug-fringe { stroke: var(--gold-3); stroke-width: 3; stroke-linecap: round; }
 
-  /* ============ PUERTA: LA CUEVA DE LAS MARAVILLAS ============ */
-  .gate {
-    position: fixed;
-    inset: 0;
-    z-index: 9500;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 22px;
-    background:
-      radial-gradient(ellipse at 50% 0%, rgba(245,197,66,.14), transparent 55%),
-      radial-gradient(ellipse at center, #1b0f3a 0%, #05030f 100%);
-    transition: opacity .7s ease, visibility .7s ease;
-  }
-  html.unlocked .gate, .gate.open { opacity: 0; visibility: hidden; pointer-events: none; }
-
-  .gate-box {
-    position: relative;
-    width: min(430px, 94vw);
-    text-align: center;
-    padding: 34px 26px 28px;
-    border-radius: 26px;
-    background: linear-gradient(165deg, rgba(27,15,58,.95), rgba(11,6,32,.96));
-    border: 1.5px solid rgba(245,197,66,.35);
-    box-shadow: 0 30px 80px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.07), 0 0 60px rgba(245,197,66,.12);
-    animation: gateIn .9s cubic-bezier(.22,1,.36,1) both;
-  }
-  @keyframes gateIn {
-    from { opacity: 0; transform: translateY(18px) scale(.96); }
-    to   { opacity: 1; transform: none; }
-  }
-  .gate-box::before {
-    content: '';
-    position: absolute;
-    inset: 6px;
-    border-radius: 20px;
-    border: 1px dashed rgba(245,197,66,.22);
-    pointer-events: none;
-  }
-  .gate-icon {
-    font-size: 58px;
-    display: block;
-    margin-bottom: 10px;
-    animation: gateGlow 2.6s ease-in-out infinite;
-    filter: drop-shadow(0 0 18px rgba(245,197,66,.6));
-  }
-  @keyframes gateGlow {
-    0%, 100% { transform: scale(1)    rotate(-2deg); }
-    50%      { transform: scale(1.09) rotate(2deg); }
-  }
-  .gate-title {
-    font-family: 'Cinzel Decorative', serif;
-    font-size: clamp(20px, 5.4vw, 26px);
-    color: var(--gold-2);
-    text-shadow: 0 0 16px rgba(245,197,66,.5);
-    margin-bottom: 10px;
-  }
-  .gate-sub {
-    font-family: 'Scheherazade New', serif;
-    font-size: 16px;
-    color: var(--text-dim);
-    line-height: 1.55;
-    margin-bottom: 20px;
-  }
-  .gate-sub strong { color: var(--gold-2); }
-
-  .magic-input {
-    width: 100%;
-    padding: 14px 16px;
-    border-radius: 14px;
-    background: rgba(8,4,22,.85);
-    border: 1.5px solid rgba(245,197,66,.3);
-    color: var(--gold-2);
-    font-family: 'Indie Flower', cursive;
-    font-size: 21px;
-    letter-spacing: 4px;
-    text-align: center;
-    outline: none;
-    transition: border-color .3s ease, box-shadow .3s ease;
-  }
-  .magic-input::placeholder { color: rgba(216,196,154,.35); font-size: 14px; letter-spacing: 1px; }
-  .magic-input:focus { border-color: rgba(245,197,66,.85); box-shadow: 0 0 24px rgba(245,197,66,.22); }
-  .magic-input.error { border-color: rgba(239,68,68,.75); animation: shake .4s ease; }
-  @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20% { transform: translateX(-9px); }
-    40% { transform: translateX(9px); }
-    60% { transform: translateX(-6px); }
-    80% { transform: translateX(6px); }
-  }
-
-  .magic-btn {
-    width: 100%;
-    margin-top: 12px;
-    cursor: pointer;
-    padding: 14px;
-    border-radius: 14px;
-    border: 1.5px solid rgba(245,197,66,.45);
-    background: linear-gradient(135deg, rgba(184,134,11,.55), rgba(122,15,43,.5));
-    color: #fff6dd;
-    font-family: 'Indie Flower', cursive;
-    font-size: 19px;
-    transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
-  }
-  .magic-btn:hover { transform: translateY(-2px); box-shadow: 0 14px 34px rgba(245,197,66,.3); border-color: var(--gold); }
-  .magic-btn:active { transform: translateY(0); }
-  .magic-err { min-height: 20px; margin-top: 10px; font-size: 13px; color: rgba(248,113,113,.9); }
-  .magic-hint { margin-top: 12px; font-size: 12px; color: rgba(216,196,154,.5); line-height: 1.5; }
   /* ============ INTRO: FROTA LA LÁMPARA ============ */
   .lamp-stage {
     position: fixed;
@@ -820,6 +708,7 @@
     .reveal { opacity: 1; transform: none; }
   }
 </style>
+<script src="./gate.js"></script>
 </head>
 <body>
 <!-- ============ CIELO, PALACIO Y ALFOMBRA ============ -->
@@ -931,25 +820,10 @@
     </g>
   </svg>
 </div>
-<!-- ============ PUERTA: LA CUEVA DE LAS MARAVILLAS ============ -->
-<div class="gate" id="gate">
-  <div class="gate-box">
-    <span class="gate-icon" aria-hidden="true">🪔</span>
-    <div class="gate-title">La Cueva de las Maravillas</div>
-    <div class="gate-sub">
-      Solo quien recuerde <strong>nuestra fecha mágica</strong> puede entrar<br>
-      <small>(formato: DD/MM/AAAA)</small>
-    </div>
-    <input class="magic-input" id="magicInput" type="text" inputmode="numeric" maxlength="10"
-           placeholder="DD/MM/AAAA" autocomplete="off" aria-label="Fecha mágica">
-    <button class="magic-btn" id="magicBtn" type="button">✨ Abrir la cueva</button>
-    <div class="magic-err" id="magicErr" role="status"></div>
-    <div class="magic-hint">🔐 La clave no está escrita en ninguna parte del código — solo existe cifrada.</div>
-  </div>
-</div>
+<!-- gate.js: si no pasaste por el index desbloqueado, te devuelve al inicio -->
 
 <!-- ============ INTRO: FROTA LA LÁMPARA ============ -->
-<div class="lamp-stage" id="lampStage">
+<div class="lamp-stage on" id="lampStage">
   <div class="lamp-wrap" id="lampWrap" role="button" tabindex="0"
        aria-label="Frota la lámpara para invocar al Genio">
     <svg class="progress-ring" viewBox="0 0 230 230" aria-hidden="true">
@@ -978,9 +852,9 @@
 <!-- ============ CONTENIDO PRINCIPAL ============ -->
 <main class="stage">
   <section class="shell" aria-label="Sexto aniversario">
-    <div class="badge" aria-hidden="true">6</div>
+    <div class="badge" aria-hidden="true"><span class="mn">6</span></div>
 
-    <h1 class="title">¡Felices 6 Meses,<br>Mi Princesa del Desierto!</h1>
+    <h1 class="title">¡Felices <span class="mn">6</span> <span class="ml">Meses</span>,<br>Mi Princesa del Desierto!</h1>
     <p class="subtitle"><span id="typeTarget"></span><span class="caret">|</span></p>
 
     <div class="clock" aria-label="Tiempo juntos">
@@ -1049,9 +923,9 @@
         <p><strong>¡Feliz aniversario, mi amor!</strong> ✨</p>
         <p>Cuenta la leyenda que Aladdin encontró en la Cueva de las Maravillas una lámpara capaz de cambiar su destino. Pero la historia real es esta: el verdadero tesoro nunca fue la lámpara... fue encontrarte a ti.</p>
         <p>Como Jasmine eligió salir de su palacio para vivir una aventura de verdad, tú elegiste caminar a mi lado y convertir lo cotidiano en algo extraordinario. No existe alfombra mágica que me lleve más lejos que tu mano tomada de la mía.</p>
-        <p><strong>Seis meses</strong> de risas, de planes imposibles, de canciones desafinadas y de abrazos que arreglan todo. Seis meses descubriendo que la magia no está en los deseos concedidos, sino en que cada deseo que pido termina con tu nombre.</p>
+        <p><strong class="mw">Seis meses</strong> de risas, de planes imposibles, de canciones desafinadas y de abrazos que arreglan todo. Seis meses descubriendo que la magia no está en los deseos concedidos, sino en que cada deseo que pido termina con tu nombre.</p>
         <p>Si el Genio me diera tres deseos, los gastaría en uno solo: <strong>más tiempo contigo</strong>. Y si me diera un cuarto, pediría que nunca se te olvide lo mucho que te amo.</p>
-        <p>Gracias por estos 6 meses, mi princesa. Vamos por el mundo entero, un vuelo de alfombra a la vez. 🧞✨</p>
+        <p>Gracias por estos <span class="mn">6</span> meses, mi princesa. Vamos por el mundo entero, un vuelo de alfombra a la vez. 🧞✨</p>
       </div>
       <div class="scroll-bottom" aria-hidden="true"></div>
       <div class="wax-seal" aria-hidden="true"><span class="seal-crack"></span>💛</div>
@@ -1062,8 +936,8 @@
     </div>
 
     <div class="stats reveal">
-      <div class="stat"><span class="num">6</span><span class="lbl">Meses juntos</span></div>
-      <div class="stat"><span class="num" id="statDays">180</span><span class="lbl">Días de magia</span></div>
+      <div class="stat"><span class="num mn">6</span><span class="lbl">Meses juntos</span></div>
+      <div class="stat"><span class="num" id="statDays">184</span><span class="lbl">Días de magia</span></div>
       <div class="stat"><span class="num">3</span><span class="lbl">Deseos cumplidos</span></div>
       <div class="stat"><span class="num">∞</span><span class="lbl">Vuelos en alfombra</span></div>
     </div>
@@ -1078,77 +952,36 @@
 </main>
 <script>
 /* ══════════════════════════════════════════════════════════════
-   1) SEGURIDAD — La fecha mágica NUNCA se escribe en el código.
-   Solo se guarda su huella SHA-256: en el "Inspect" únicamente
-   se ve un hash irreversibles, no la clave.
+   1) CONSTANTES Y FECHAS DEL RELOJ
+   (gate.js exige haber pasado por el index desbloqueado;
+   si no, esta página te devuelve a la portada.)
    ══════════════════════════════════════════════════════════════ */
-const SECRET_HASH = '0ebbfd70e2ffb1098ebb70823da2ee4778899eee7d8a116240cce48ff1fa40cf';
-const MAGIC_EPOCH = 1774656000000; /* instante base (ms) para el reloj de amor */
+/* Instante base del reloj de amor.
+   Se guarda como instante UTC, pero se convierte a la MEDIANOCHE LOCAL de ese
+   mismo día: así "Días", "Horas", "Minutos" y "Segundos" reflejan la fecha y la
+   hora REALES del reloj de quien lo mira. (Si se usara UTC tal cual, en una zona
+   UTC-05:00 el reloj iría 5 horas adelantado y contaría un día extra.) */
+const MAGIC_EPOCH = (function () {
+  const utc = new Date(1774656000000);
+  return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate()).getTime();
+})();
 
-/* SHA-256: usa Web Crypto si existe; si no (algunos file://), usa fallback propio */
-async function hashText(text) {
-  if (window.crypto && window.crypto.subtle && window.crypto.subtle.digest) {
-    try {
-      const buf = await window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-    } catch (e) { /* cae al fallback */ }
-  }
-  return sha256Fallback(text);
+/* Meses cumplidos + su nombre en letras (se recalculan solos, no van fijos) */
+const MESES_TEXTO = ['cero', 'un', 'dos', 'tres', 'cuatro', 'cinco', 'seis',
+  'siete', 'ocho', 'nueve', 'diez', 'once', 'doce'];
+
+function mesesCumplidos(desde, hasta) {
+  let m = (hasta.getFullYear() - desde.getFullYear()) * 12 + (hasta.getMonth() - desde.getMonth());
+  if (hasta.getDate() < desde.getDate()) m--;
+  return Math.max(0, m);
 }
 
-/* Implementación compacta de SHA-256 (dominio público, solo ASCII) */
-function sha256Fallback(ascii) {
-  function rr(v, a) { return (v >>> a) | (v << (32 - a)); }
-  const maxWord = Math.pow(2, 32);
-  let i, j, result = '';
-  const words = [];
-  const asciiBitLength = ascii.length * 8;
-  let hash = sha256Fallback.h = sha256Fallback.h || [];
-  let k = sha256Fallback.k = sha256Fallback.k || [];
-  let primeCounter = k.length;
-  const isComposite = {};
-  for (let candidate = 2; primeCounter < 64; candidate++) {
-    if (!isComposite[candidate]) {
-      for (i = 0; i < 313; i += candidate) isComposite[i] = candidate;
-      hash[primeCounter] = (Math.pow(candidate, .5) * maxWord) | 0;
-      k[primeCounter++] = (Math.pow(candidate, 1 / 3) * maxWord) | 0;
-    }
-  }
-  ascii += '\x80';
-  while (ascii.length % 64 - 56) ascii += '\x00';
-  for (i = 0; i < ascii.length; i++) {
-    j = ascii.charCodeAt(i);
-    if (j >> 8) return '';
-    words[i >> 2] |= j << ((3 - i % 4) * 8);
-  }
-  words[words.length] = (asciiBitLength / maxWord) | 0;
-  words[words.length] = asciiBitLength;
-  for (j = 0; j < words.length;) {
-    const w = words.slice(j, j += 16);
-    const oldHash = hash;
-    hash = hash.slice(0, 8);
-    for (i = 0; i < 64; i++) {
-      const w15 = w[i - 15], w2 = w[i - 2];
-      const a = hash[0], e = hash[4];
-      const temp1 = hash[7]
-        + (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25))
-        + ((e & hash[5]) ^ ((~e) & hash[6]))
-        + k[i]
-        + (w[i] = (i < 16) ? w[i] : (w[i - 16] + (rr(w15, 7) ^ rr(w15, 18) ^ (w15 >>> 3)) + w[i - 7] + (rr(w2, 17) ^ rr(w2, 19) ^ (w2 >>> 10))) | 0);
-      const temp2 = (rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
-      hash = [(temp1 + temp2) | 0].concat(hash);
-      hash[4] = (hash[4] + temp1) | 0;
-    }
-    for (i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i]) | 0;
-  }
-  for (i = 0; i < 8; i++) {
-    for (j = 3; j + 1; j--) {
-      const b = (hash[i] >> (j * 8)) & 255;
-      result += ((b < 16) ? 0 : '') + b.toString(16);
-    }
-  }
-  return result;
+function mesesEnLetras() {
+  const m = mesesCumplidos(new Date(MAGIC_EPOCH), new Date());
+  const p = MESES_TEXTO[Math.min(m, MESES_TEXTO.length - 1)];
+  return p ? p + (m === 1 ? ' mes' : ' meses') : m + ' meses';
 }
+
 /* ══════════════════════════════════════════════════════════════
    2) UTILIDADES: sonido procedural, chispas y humo del Genio
    ══════════════════════════════════════════════════════════════ */
@@ -1223,58 +1056,13 @@ function puffSmoke(x, y, amount = 12) {
   }
 }
 /* ══════════════════════════════════════════════════════════════
-   3) PUERTA: LA CUEVA DE LAS MARAVILLAS
+   3) ELEMENTOS CLAVE (lámpara, anillo de progreso)
    ══════════════════════════════════════════════════════════════ */
 const root = document.documentElement;
-const gate = document.getElementById('gate');
-const magicInput = document.getElementById('magicInput');
-const magicBtn = document.getElementById('magicBtn');
-const magicErr = document.getElementById('magicErr');
 const lampStage = document.getElementById('lampStage');
 const lampWrap = document.getElementById('lampWrap');
 const ringBar = document.getElementById('ringBar');
 const RING_LEN = 603;
-
-function showError(msg, reset) {
-  magicErr.textContent = msg;
-  magicInput.classList.add('error');
-  if (reset) { magicInput.value = ''; magicInput.focus(); }
-  setTimeout(() => magicInput.classList.remove('error'), 700);
-}
-
-async function tryUnlock() {
-  const val = magicInput.value.trim();
-  if (!val) { showError('🪔 Falta la fecha mágica...', false); return; }
-  const normalized = val.replace(/\s/g, '').toUpperCase();
-  magicBtn.disabled = true;
-  const digest = await hashText(normalized);
-  magicBtn.disabled = false;
-
-  if (digest === SECRET_HASH) {
-    magicErr.textContent = '';
-    magicInput.classList.remove('error');
-    gate.classList.add('open');
-    root.classList.add('unlocked');
-    try { sessionStorage.setItem('anv_ok', '1'); } catch (e) {}
-    chime();
-    const r = magicInput.getBoundingClientRect();
-    sparkleBurst(r.left + r.width / 2, r.top + r.height / 2, 26);
-    setTimeout(openLampStage, 650);
-  } else {
-    showError('❌ Esa no es nuestra fecha... inténtalo otra vez 💛', true);
-    tone(180, .3, 'square', .05);
-  }
-}
-
-/* Formato automático DD/MM/AAAA */
-magicInput.addEventListener('input', e => {
-  let v = e.target.value.replace(/[^0-9]/g, '');
-  if (v.length > 2) v = v.slice(0, 2) + '/' + v.slice(2);
-  if (v.length > 5) v = v.slice(0, 5) + '/' + v.slice(5);
-  e.target.value = v.slice(0, 10);
-});
-magicBtn.addEventListener('click', tryUnlock);
-magicInput.addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
 
 /* ══════════════════════════════════════════════════════════════
    4) FROTA LA LÁMPARA
@@ -1502,13 +1290,31 @@ function typeText(el, text, speed, done) {
 }
 
 function tickClock() {
-  const elapsed = Math.max(0, Date.now() - MAGIC_EPOCH);
-  const s = Math.floor(elapsed / 1000);
-  document.getElementById('cDays').textContent = Math.floor(s / 86400);
-  document.getElementById('cHours').textContent = Math.floor(s / 3600) % 24;
-  document.getElementById('cMins').textContent = Math.floor(s / 60) % 60;
-  document.getElementById('cSecs').textContent = s % 60;
-  document.getElementById('statDays').textContent = Math.floor(s / 86400);
+  const ahora = new Date();
+  const inicio = new Date(MAGIC_EPOCH);
+
+  /* Días naturales transcurridos: exactos aunque haya cambios de horario (DST) */
+  const diaInicio = new Date(inicio.getFullYear(), inicio.getMonth(), inicio.getDate());
+  const diaHoy = new Date(ahora.getFullYear(), ahora.getMonth(), ahora.getDate());
+  let dias = Math.round((diaHoy - diaInicio) / 86400000);
+  if (dias < 0) dias = 0;
+
+  /* Horas / minutos / segundos = la hora REAL del reloj (formato 24 h) */
+  const dos = n => String(n).padStart(2, '0');
+  document.getElementById('cDays').textContent = dias;
+  document.getElementById('cHours').textContent = dos(ahora.getHours());
+  document.getElementById('cMins').textContent = dos(ahora.getMinutes());
+  document.getElementById('cSecs').textContent = dos(ahora.getSeconds());
+  document.getElementById('statDays').textContent = dias;
+
+  /* Meses (badge, título, estadística y prosa) recalculados en vivo */
+  const meses = mesesCumplidos(inicio, ahora);
+  document.querySelectorAll('.mn').forEach(el => { el.textContent = meses; });
+  document.querySelectorAll('.ml').forEach(el => { el.textContent = meses === 1 ? 'Mes' : 'Meses'; });
+  document.querySelectorAll('.mw').forEach(el => {
+    const t = mesesEnLetras();
+    el.textContent = t.charAt(0).toUpperCase() + t.slice(1);
+  });
 }
 
 /* ══════════════════════════════════════════════════════════════
@@ -1671,10 +1477,8 @@ let started = false;
 function startExperience() {
   if (started) return;
   started = true;
-  tickClock();
-  setInterval(tickClock, 1000);
   typeText(document.getElementById('typeTarget'),
-    'Tres deseos, una lámpara y seis meses de magia contigo ✨', 38);
+    'Tres deseos, una lámpara y ' + mesesEnLetras() + ' de magia contigo ✨', 38);
 }
 
 function boot() {
@@ -1683,17 +1487,17 @@ function boot() {
   requestAnimationFrame(drawDust);
   window.addEventListener('resize', resizeCanvas);
 
+  /* El reloj arranca de inmediato (con la hora real), incluso antes de frotar la lámpara */
+  tickClock();
+  setInterval(tickClock, 1000);
+
   initWishes();
   initReveal();
   initSound();
   initBack();
 
-  if (root.classList.contains('unlocked')) {
-    /* Ya se desbloqueó en el inicio: salta la puerta, pero vive la lámpara */
-    setTimeout(openLampStage, 450);
-  } else {
-    setTimeout(() => magicInput.focus(), 700);
-  }
+  /* Sin puerta: se entra directo a frotar la lámpara */
+  openLampStage();
 }
 
 boot();
