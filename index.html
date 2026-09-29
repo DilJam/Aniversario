@@ -555,6 +555,16 @@
         <span class="btn-badge">💛</span>
         <span class="btn-heart">Rapunzel · y su luz</span>
       </button>
+
+      <button class="btn gold" id="open6" type="button" aria-label="Ver el sexto aniversario">
+        <span class="btn-door-icon">🪔</span>
+        <span class="btn-label">
+          <span class="btn-code">Door · 06</span>
+          <span class="btn-name">Sexto aniversario</span>
+        </span>
+        <span class="btn-badge">🧞</span>
+        <span class="btn-heart">Aladdín · un mundo nuevo</span>
+      </button>
     </div>
 
     <div class="hint">🌀 Cada puerta tiene su magia — y tú eres la mejor sorpresa de todas 💜</div>
@@ -627,15 +637,89 @@
     document.getElementById('open5').addEventListener('click', () => 
       navigateTo('./aniversario5.html', 'linear-gradient(180deg, #2a1b4e 0%, #4a2c6d 40%, #d4a574 85%, #f5d78e 100%)'));
 
+    document.getElementById('open6').addEventListener('click', () => 
+      navigateTo('./aniversario6.html', 'linear-gradient(180deg, #12073a 0%, #2a1046 42%, #7a2c2c 76%, #f0c060 100%)'));
+
     (function() {
-      const CORRECT_DATE = '28/03/2026'; // ← CAMBIA ESTO por la fecha especial (formato DD/MM/AAAA)
+      /* ══════════════════════════════════════════════════════════════
+         🔐 SEGURIDAD: la fecha especial NO está escrita en ningún lado.
+         Solo se guarda su huella SHA-256. Si alguien abre el "Inspect"
+         del navegador o ve el código fuente, únicamente encontrará este
+         hash (irreversible), nunca la fecha.
+         ══════════════════════════════════════════════════════════════ */
+      const SECRET_HASH = '0ebbfd70e2ffb1098ebb70823da2ee4778899eee7d8a116240cce48ff1fa40cf';
+
+      /* Calcula SHA-256 en hexadecimal (Web Crypto + respaldo propio) */
+      async function sha256Hex(texto) {
+        if (window.crypto && window.crypto.subtle && window.crypto.subtle.digest) {
+          try {
+            const buf = await window.crypto.subtle.digest('SHA-256', new TextEncoder().encode(texto));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+          } catch (e) { /* usa el respaldo de abajo */ }
+        }
+        return sha256Fallback(texto);
+      }
+
+      /* Respaldo compacto de SHA-256 (por si el navegador no expone crypto.subtle) */
+      function sha256Fallback(ascii) {
+        function rr(v, a) { return (v >>> a) | (v << (32 - a)); }
+        const maxWord = Math.pow(2, 32);
+        let i, j, result = '';
+        const words = [];
+        const asciiBitLength = ascii.length * 8;
+        let hash = sha256Fallback.h = sha256Fallback.h || [];
+        let k = sha256Fallback.k = sha256Fallback.k || [];
+        let primeCounter = k.length;
+        const isComposite = {};
+        for (let candidate = 2; primeCounter < 64; candidate++) {
+          if (!isComposite[candidate]) {
+            for (i = 0; i < 313; i += candidate) isComposite[i] = candidate;
+            hash[primeCounter] = (Math.pow(candidate, .5) * maxWord) | 0;
+            k[primeCounter++] = (Math.pow(candidate, 1 / 3) * maxWord) | 0;
+          }
+        }
+        ascii += '\x80';
+        while (ascii.length % 64 - 56) ascii += '\x00';
+        for (i = 0; i < ascii.length; i++) {
+          j = ascii.charCodeAt(i);
+          if (j >> 8) return '';
+          words[i >> 2] |= j << ((3 - i % 4) * 8);
+        }
+        words[words.length] = (asciiBitLength / maxWord) | 0;
+        words[words.length] = asciiBitLength;
+        for (j = 0; j < words.length;) {
+          const w = words.slice(j, j += 16);
+          const oldHash = hash;
+          hash = hash.slice(0, 8);
+          for (i = 0; i < 64; i++) {
+            const w15 = w[i - 15], w2 = w[i - 2];
+            const a = hash[0], e = hash[4];
+            const temp1 = hash[7]
+              + (rr(e, 6) ^ rr(e, 11) ^ rr(e, 25))
+              + ((e & hash[5]) ^ ((~e) & hash[6]))
+              + k[i]
+              + (w[i] = (i < 16) ? w[i] : (w[i - 16] + (rr(w15, 7) ^ rr(w15, 18) ^ (w15 >>> 3)) + w[i - 7] + (rr(w2, 17) ^ rr(w2, 19) ^ (w2 >>> 10))) | 0);
+            const temp2 = (rr(a, 2) ^ rr(a, 13) ^ rr(a, 22)) + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+            hash = [(temp1 + temp2) | 0].concat(hash);
+            hash[4] = (hash[4] + temp1) | 0;
+          }
+          for (i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i]) | 0;
+        }
+        for (i = 0; i < 8; i++) {
+          for (j = 3; j + 1; j--) {
+            const b = (hash[i] >> (j * 8)) & 255;
+            result += ((b < 16) ? 0 : '') + b.toString(16);
+          }
+        }
+        return result;
+      }
 
       const lockOverlay = document.getElementById('lockOverlay');
       const lockInput = document.getElementById('lockInput');
       const lockBtn = document.getElementById('lockBtn');
       const lockError = document.getElementById('lockError');
 
-      function checkDate() {
+      async function checkDate() {
         const val = lockInput.value.trim();
         if (!val) {
           lockError.textContent = '💜 Ingresa una fecha...';
@@ -644,9 +728,14 @@
         }
 
         const normalized = val.replace(/\s/g, '').toUpperCase();
-        const expected = CORRECT_DATE.replace(/\s/g, '').toUpperCase();
 
-        if (normalized === expected) {
+        /* Se compara la HUELLA, nunca la fecha en claro */
+        lockBtn.disabled = true;
+        const digest = await sha256Hex(normalized);
+        lockBtn.disabled = false;
+
+        if (digest === SECRET_HASH) {
+          try { sessionStorage.setItem('anv_ok', '1'); } catch (e) {}
           lockError.textContent = '';
           lockInput.classList.remove('error');
           lockOverlay.classList.add('unlocked');
