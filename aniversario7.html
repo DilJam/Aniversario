@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Halloween · 7mo Aniversario 💜</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕷️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Indie+Flower&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #070910;
+      --bg-moon: #120d1d;
+      --bg-violet: #1a1128;
+      --bg-forest: #0c261e;
+      --forest-dark: #081c18;
+      --purple: #8f6bff;
+      --purple-soft: #c7b3ff;
+      --emerald: #7ff0c7;
+      --gold: #f7d678;
+      --rose: #ff7aa4;
+      --text: #f3ebff;
+      --text-soft: #d6c9ef;
+      --glass: rgba(16, 11, 25, 0.76);
+      --line: rgba(193, 172, 255, 0.3);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: 'Indie Flower', cursive;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(143, 107, 255, 0.22), transparent 26%),
+        radial-gradient(circle at 15% 25%, rgba(127, 240, 199, 0.12), transparent 18%),
+        linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-moon) 26%, var(--bg-violet) 58%, #0d1a1c 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    body {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 48px 18px 40px;
+    }
+
+    .moon {
+      position: fixed;
+      right: 12%;
+      top: 8%;
+      width: 170px;
+      height: 170px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #fff8d8 0%, #f4df9c 30%, #ddb36c 58%, #9a6f39 100%);
+      box-shadow: 0 0 50px rgba(244, 198, 92, 0.3), 0 0 120px rgba(181, 144, 70, 0.2);
+      opacity: 0.9;
+      z-index: 0;
+      animation: floatMoon 7s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatMoon {
+      from { transform: translateY(-12px) scale(0.98); }
+      to   { transform: translateY(15px) scale(1.04); }
+    }
+
+    .night-glow,
+    .night-glow::before,
+    .night-glow::after {
+      position: fixed;
+      content: "";
+      border-radius: 50%;
+      filter: blur(22px);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .night-glow {
+      width: 460px;
+      height: 170px;
+      left: -40px;
+      bottom: 18%;
+      background: rgba(122, 144, 255, 0.10);
+      animation: drift 16s ease-in-out infinite alternate;
+    }
+
+    .night-glow::before {
+      width: 420px;
+      height: 160px;
+      right: -110px;
+      bottom: 10%;
+      background: rgba(127, 240, 199, 0.12);
+      animation: drift 18s ease-in-out infinite alternate-reverse;
+    }
+
+    .night-glow::after {
+      width: 420px;
+      height: 180px;
+      left: 46%;
+      bottom: 8%;
+      background: rgba(255, 122, 164, 0.08);
+      animation: drift 14s ease-in-out infinite alternate;
+    }
+
+    @keyframes drift {
+      0%   { transform: translateX(-26px) translateY(0); }
+      100% { transform: translateX(30px) translateY(-12px); }
+    }
+
+    .forest {
+      position: fixed;
+      inset: auto 0 0 0;
+      height: 35vh;
+      z-index: 0;
+      background:
+        linear-gradient(180deg, rgba(7, 18, 15, 0.1), rgba(5, 18, 14, 0.8)),
+        repeating-linear-gradient(90deg, #071b17 0 22px, #0b291f 22px 46px, #0b1e1d 46px 68px);
+      clip-path: polygon(0 100%, 0 48%, 8% 44%, 14% 54%, 22% 40%, 28% 58%, 34% 37%, 42% 52%, 50% 35%, 58% 56%, 66% 38%, 72% 54%, 80% 36%, 88% 55%, 100% 48%, 100% 100%);
+      opacity: 0.9;
+    }
+
+    .wings {
+      position: fixed;
+      bottom: 8vh;
+      width: 210px;
+      height: 170px;
+      z-index: 0;
+      opacity: 0.38;
+      filter: drop-shadow(0 0 25px rgba(143, 107, 255, 0.28));
+    }
+
+    .wings.left  { left: 6%; }
+    .wings.right { right: 6%; }
+
+    .wings::before,
+    .wings::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(15, 12, 22, 0.9), rgba(41, 30, 64, 0.7));
+      clip-path: polygon(50% 0%, 100% 100%, 72% 100%, 58% 66%, 38% 66%, 24% 100%, 0% 100%);
+      border-radius: 50% 50% 18% 18%;
+    }
+
+    .wings::after {
+      transform: scaleX(-1);
+      opacity: 0.76;
+    }
+
+    .back-btn {
+      position: fixed;
+      top: 22px;
+      left: 22px;
+      z-index: 50;
+      border: 1px solid rgba(164, 137, 255, 0.56);
+      background: rgba(16, 11, 24, 0.7);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 12px 18px;
+      font: inherit;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 12px 35px rgba(0,0,0,0.18);
+      transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      border-color: rgba(127, 240, 199, 0.9);
+      box-shadow: 0 14px 40px rgba(127, 240, 199, 0.22);
+    }
+
+    .shell {
+      position: relative;
+      z-index: 2;
+      width: min(940px, 92vw);
+      padding: clamp(24px, 3vw, 42px);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(14, 10, 21, 0.86), rgba(9, 12, 17, 0.93));
+      border: 1px solid var(--line);
+      box-shadow: 0 30px 90px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
+      backdrop-filter: blur(10px);
+      overflow: hidden;
+    }
+
+    .shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, rgba(155, 109, 255, 0.10), transparent 25%, rgba(127, 240, 199, 0.08), transparent 74%, rgba(255, 122, 164, 0.08));
+      pointer-events: none;
+    }
+
+    .eyebrow {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      letter-spacing: 2px;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      color: var(--gold);
+      opacity: 0.9;
+      margin-bottom: 12px;
+    }
+
+    .hero-line {
+      position: relative;
+      z-index: 1;
+      display: inline-block;
+      margin-bottom: 12px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 218, 126, 0.28);
+      background: rgba(11, 9, 17, 0.5);
+      color: var(--purple-soft);
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      position: relative;
+      z-index: 1;
+      font-family: 'Cinzel Decorative', cursive;
+      font-size: clamp(3rem, 7vw, 5.6rem);
+      line-height: 1.03;
+      margin: 0 0 16px;
+      color: var(--text);
+      text-shadow: 0 0 30px rgba(178, 145, 255, 0.16), 0 0 18px rgba(127, 240, 199, 0.10);
+    }
+
+    h1 span {
+      display: inline-block;
+      background: linear-gradient(135deg, #f5e5ff 0%, var(--purple-soft) 28%, var(--emerald) 55%, var(--gold) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .lead {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto 20px;
+      font-size: clamp(1.2rem, 2.5vw, 1.72rem);
+      line-height: 1.6;
+      color: var(--text-soft);
+    }
+
+    .quote {
+      position: relative;
+      z-index: 1;
+      margin: 18px auto 26px;
+      padding: 24px 26px;
+      max-width: 860px;
+      background: linear-gradient(180deg, rgba(13, 10, 20, 0.82), rgba(18, 16, 28, 0.7));
+      border: 1px solid rgba(146, 131, 188, 0.32);
+      border-radius: 22px;
+      color: #f2eaff;
+      font-size: clamp(1.14rem, 2vw, 1.55rem);
+      line-height: 1.75;
+      text-align: center;
+      box-shadow: inset 0 0 28px rgba(143, 107, 255, 0.08), 0 18px 45px rgba(0,0,0,0.18);
+    }
+
+    .quote strong {
+      color: var(--gold);
+    }
+
+    .cards {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(180px, 1fr));
+      gap: 18px;
+      margin-top: 14px;
+    }
+
+    .card {
+      padding: 22px 18px;
+      border-radius: 18px;
+      background: rgba(17, 13, 23, 0.7);
+      border: 1px solid rgba(196, 177, 255, 0.18);
+      min-height: 182px;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.02);
+    }
+
+    .card .icon {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 10px;
+      text-shadow: 0 0 16px rgba(127, 240, 199, 0.22);
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1.4rem;
+      color: var(--gold);
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--text-soft);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    .signature {
+      position: relative;
+      z-index: 1;
+      margin-top: 28px;
+      text-align: center;
+      font-size: clamp(1.4rem, 3vw, 2.3rem);
+      color: var(--emerald);
+      text-shadow: 0 0 18px rgba(127, 240, 199, 0.25);
+    }
+
+    .signature span {
+      color: var(--rose);
+      text-shadow: 0 0 18px rgba(255, 122, 164, 0.26);
+    }
+
+    .spark {
+      position: fixed;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0.8;
+      background: radial-gradient(circle, rgba(255,255,255,1), rgba(255,255,255,0.1) 60%, transparent 70%);
+      box-shadow: 0 0 12px rgba(255,255,255,0.9);
+      z-index: 1;
+      animation: twinkle 3.2s ease-in-out infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0%   { transform: scale(0.7); opacity: 0.35; }
+      100% { transform: scale(1.3); opacity: 1; }
+    }
+
+    @media (max-width: 760px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+
+      .wings { display: none; }
+
+      .moon {
+        width: 120px;
+        height: 120px;
+        right: 8%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" type="button" aria-label="Volver al inicio" onclick="window.location.href='./index.html'">🚪 Volver</button>
+
+  <div class="moon" aria-hidden="true"></div>
+  <div class="night-glow" aria-hidden="true"></div>
+  <div class="forest" aria-hidden="true"></div>
+  <div class="wings left" aria-hidden="true"></div>
+  <div class="wings right" aria-hidden="true"></div>
+
+  <main class="shell" aria-label="Séptimo aniversario">
+    <div class="eyebrow">Reino de la noche · 7° aniversario</div>
+    <div class="hero-line">Para ti, mi princesa del crepúsculo</div>
+    <h1>En cada sombra, <span>te amo más</span></h1>
+
+    <p class="lead">
+      Hay historias que parecen sacadas de una película de cuento oscuro: bellas, tristes, mágicas y difíciles de olvidar.
+      Pero la verdadera historia se vuelve hermosa cuando tú apareces, porque tú eres la razón por la que incluso la noche aprendió a sonreír.
+    </p>
+
+    <div class="quote">
+      “No hay hechizo más poderoso que el que me hace volver a ti cada vez; no hay reino, ni tormenta, ni luna que puedan alejarme de la forma en que me haces sentir.”
+      <br><strong>— para mi amor, mi magia favorita</strong>
+    </div>
+
+    <div class="cards">
+      <article class="card">
+        <span class="icon">🕸️</span>
+        <h3>Mi verdad</h3>
+        <p>Con cada risa, cada abrazo y cada momento contigo, entendí que el amor no es una historia de miedo: es la magia más bonita que jamás pudo tocarme.</p>
+      </article>
+
+      <article class="card">
+        <span class="icon">🌙</span>
+        <h3>Bajo la luna</h3>
+        <p>Tú haces que la noche se vuelva más suave, más bella y más llena de significado. Es como si la luna misma hubiera elegido iluminarte.</p>
+      </article>
+
+      <article class="card">
+        <span class="icon">💜</span>
+        <h3>Para siempre</h3>
+        <p>Si existiera un reino eterno, sería el que construimos juntos: lleno de amor, calma, magia y la certeza de que yo no me cansaría de amarte.</p>
+      </article>
+    </div>
+
+    <div class="signature">Feliz aniversario, mi <span>princesa de la noche</span> ✨</div>
+  </main>
+
+  <script src="./gate.js"></script>
+  <script>
+    const body = document.body;
+    for (let i = 0; i < 30; i++) {
+      const spark = document.createElement('span');
+      spark.className = 'spark';
+      const size = Math.random() * 7 + 4;
+      const left = Math.random() * 100;
+      const top = Math.random() * 100;
+      const delay = Math.random() * 3;
+      spark.style.width = `${size}px`;
+      spark.style.height = `${size}px`;
+      spark.style.left = `${left}%`;
+      spark.style.top = `${top}%`;
+      spark.style.animationDelay = `${delay}s`;
+      spark.style.opacity = (0.3 + Math.random() * 0.7).toFixed(2);
+      body.appendChild(spark);
+    }
+  </script>
+</body>
+</html>
